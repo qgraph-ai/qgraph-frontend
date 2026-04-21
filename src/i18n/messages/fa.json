@@ -1,0 +1,50 @@
+{
+  "siteHeader": {
+    "brand": "QGraph",
+    "signIn": "ورود",
+    "languageMenuLabel": "تغییر زبان",
+    "localeEn": "English",
+    "localeFa": "فارسی",
+    "themeToggleLabel": "تغییر حالت نمایش",
+    "themeLight": "روشن",
+    "themeDark": "تاریک",
+    "headerToolbarLabel": "ابزارهای سایت"
+  },
+  "hero": {
+    "kicker": "QGraph",
+    "title": "ابزاری برای مطالعه‌ی قرآن.",
+    "subtitle": "بخوان، بخش‌بندی کن و جست‌وجو کن — با ساختار، منابع و توضیحات روشن."
+  },
+  "apps": {
+    "quranTitle": "قرآن",
+    "quranBody": "متن کامل قرآن با پیمایش آیه‌به‌آیه، ترجمه‌ها و حالت خواندن.",
+    "segmentationTitle": "بخش‌بندی",
+    "segmentationBody": "آیات را به بخش‌های موضوعی و دستوری تقسیم کن تا مطالعه‌ی دقیق‌تری داشته باشی.",
+    "searchTitle": "جست‌وجوی پیشرفته",
+    "searchBody": "به کارگاه جست‌وجو برو و نتایج ساختاریافته با سطح اطمینان و توضیحات را ببین."
+  },
+  "ayah": {
+    "arabic": "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
+    "translation": "همانا با سختی، آسانی است.",
+    "reference": "قرآن ۹۴ : ۶"
+  },
+  "differentiators": {
+    "heading": "چرا QGraph",
+    "explainableTitle": "قابل توضیح",
+    "explainableBody": "هر بخش از نتایج، سطح اطمینان و دلیل تطابقش را همراه دارد.",
+    "structuredTitle": "ساختاریافته",
+    "structuredBody": "پاسخ‌ها به جای یک فهرست ساده، در بخش‌های نوع‌دار ارائه می‌شوند: تطابق مستقیم، زمینه‌ی موضوعی و تحلیل.",
+    "guestTitle": "باز برای میهمانان",
+    "guestBody": "بدون حساب کاربری جست‌وجو و کاوش کن. برای ذخیره‌ی نشانک‌ها و تاریخچه، وارد شو."
+  },
+  "footer": {
+    "tagline": "با سادگی ساخته شده.",
+    "copyright": "© QGraph"
+  },
+  "search": {
+    "placeholderTitle": "صفحه‌ی جست‌وجو به‌زودی.",
+    "placeholderQueryLabel": "عبارت جست‌وجو",
+    "placeholderEmpty": "عبارتی وارد نشده است.",
+    "backToLanding": "→ بازگشت به صفحه‌ی اصلی"
+  }
+}

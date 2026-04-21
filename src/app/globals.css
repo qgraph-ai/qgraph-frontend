@@ -127,4 +127,7 @@
   html {
     @apply font-sans;
   }
+  html[lang="fa"] {
+    font-family: var(--font-sans-fa), var(--font-sans);
+  }
 }

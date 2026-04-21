@@ -1,0 +1,50 @@
+{
+  "siteHeader": {
+    "brand": "QGraph",
+    "signIn": "Sign in",
+    "languageMenuLabel": "Change language",
+    "localeEn": "English",
+    "localeFa": "فارسی",
+    "themeToggleLabel": "Toggle theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "headerToolbarLabel": "Site controls"
+  },
+  "hero": {
+    "kicker": "QGraph",
+    "title": "A toolkit for studying the Qur'an.",
+    "subtitle": "Read, segment, and search — with structure, sources, and clear explanations."
+  },
+  "apps": {
+    "quranTitle": "Qur'an",
+    "quranBody": "Read the full text with verse-by-verse navigation, translations, and reading mode.",
+    "segmentationTitle": "Segmentation",
+    "segmentationBody": "Break verses into thematic and grammatical segments for close study.",
+    "searchTitle": "Advanced search",
+    "searchBody": "Open the search workspace for confidence-scored, structured results with explanations."
+  },
+  "ayah": {
+    "arabic": "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
+    "translation": "Indeed, with hardship comes ease.",
+    "reference": "Qur'ān 94 : 6"
+  },
+  "differentiators": {
+    "heading": "Why QGraph",
+    "explainableTitle": "Explainable",
+    "explainableBody": "Every block carries a confidence score and a note on why it matches.",
+    "structuredTitle": "Structured",
+    "structuredBody": "Answers come grouped into typed blocks — direct matches, thematic context, analysis — not a flat list.",
+    "guestTitle": "Open to guests",
+    "guestBody": "Search and explore without an account. Sign in when you want bookmarks and history."
+  },
+  "footer": {
+    "tagline": "Built with restraint.",
+    "copyright": "© QGraph"
+  },
+  "search": {
+    "placeholderTitle": "Search UI coming soon.",
+    "placeholderQueryLabel": "You searched for",
+    "placeholderEmpty": "No query provided.",
+    "backToLanding": "← Back to landing"
+  }
+}
