@@ -5,6 +5,7 @@ import { Toolbar, VisuallyHidden } from "radix-ui"
 import { BrandOrnament, BrandWordmark } from "@/components/brand-mark"
 import { LanguageToggle } from "@/components/language-toggle"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { UserMenu } from "@/components/user-menu"
 
 export async function SiteHeader() {
   const t = await getTranslations("siteHeader")
@@ -24,14 +25,7 @@ export async function SiteHeader() {
           <LanguageToggle />
           <ThemeToggle />
           <Toolbar.Separator className="mx-1 h-4 w-px bg-border" />
-          <Toolbar.Link asChild>
-            <Link
-              href="/sign-in"
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {t("signIn")}
-            </Link>
-          </Toolbar.Link>
+          <UserMenu />
         </Toolbar.Root>
       </div>
     </header>

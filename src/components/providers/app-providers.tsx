@@ -3,6 +3,7 @@
 import { Toaster } from "react-hot-toast"
 
 import { DirectionProvider } from "@/components/ui/direction"
+import { AuthProvider } from "@/features/auth/auth-provider"
 
 import { QueryProvider } from "./query-provider"
 import { ThemeProvider } from "./theme-provider"
@@ -24,10 +25,12 @@ export function AppProviders({
       disableTransitionOnChange
     >
       <QueryProvider>
-        <DirectionProvider dir={direction}>
-          {children}
-          <Toaster position="top-center" />
-        </DirectionProvider>
+        <AuthProvider>
+          <DirectionProvider dir={direction}>
+            {children}
+            <Toaster position="top-center" />
+          </DirectionProvider>
+        </AuthProvider>
       </QueryProvider>
     </ThemeProvider>
   )

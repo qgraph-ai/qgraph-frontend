@@ -2,6 +2,9 @@
   "siteHeader": {
     "brand": "QGraph",
     "signIn": "ورود",
+    "signUp": "ثبت‌نام",
+    "account": "حساب کاربری",
+    "signOut": "خروج",
     "languageMenuLabel": "تغییر زبان",
     "localeEn": "English",
     "localeFa": "فارسی",
@@ -46,5 +49,141 @@
     "placeholderQueryLabel": "عبارت جست‌وجو",
     "placeholderEmpty": "عبارتی وارد نشده است.",
     "backToLanding": "→ بازگشت به صفحه‌ی اصلی"
+  },
+  "auth": {
+    "common": {
+      "email": "ایمیل",
+      "password": "گذرواژه",
+      "newPassword": "گذرواژه‌ی جدید",
+      "currentPassword": "گذرواژه‌ی فعلی",
+      "confirmPassword": "تکرار گذرواژه",
+      "firstName": "نام",
+      "lastName": "نام خانوادگی",
+      "submit": "ادامه",
+      "back": "بازگشت",
+      "loading": "در حال بارگذاری…",
+      "or": "یا",
+      "showPassword": "نمایش گذرواژه",
+      "hidePassword": "پنهان کردن گذرواژه",
+      "emailPlaceholder": "you@example.com",
+      "passwordResetAcknowledged": "اگر حسابی با این ایمیل وجود داشته باشد، لینک بازیابی ارسال شد. صندوق ورودی‌تان را بررسی کنید.",
+      "continueAsGuest": "ادامه به عنوان مهمان"
+    },
+    "signIn": {
+      "title": "خوش آمدید",
+      "description": "به حساب QGraph خود وارد شوید.",
+      "submit": "ورود",
+      "google": "ادامه با گوگل",
+      "forgotPassword": "گذرواژه را فراموش کرده‌اید؟",
+      "noAccount": "حساب کاربری ندارید؟",
+      "createAccount": "ایجاد حساب",
+      "resetSuccessBanner": "گذرواژه‌ی شما بازنشانی شد. اکنون می‌توانید وارد شوید.",
+      "invalidCredentials": "ایمیل یا گذرواژه اشتباه است.",
+      "inactiveUser": "این حساب هنوز فعال نشده است. برای لینک فعال‌سازی ایمیل‌تان را بررسی کنید.",
+      "resendActivation": "ارسال دوباره‌ی ایمیل فعال‌سازی"
+    },
+    "signUp": {
+      "title": "ایجاد حساب کاربری",
+      "description": "با ایمیل و گذرواژه ثبت‌نام کنید یا با گوگل ادامه دهید.",
+      "submit": "ایجاد حساب",
+      "google": "ثبت‌نام با گوگل",
+      "haveAccount": "قبلاً حساب دارید؟",
+      "signIn": "ورود",
+      "termsHint": "با ثبت‌نام، شرایط استفاده را می‌پذیرید."
+    },
+    "checkEmail": {
+      "title": "ایمیل خود را بررسی کنید",
+      "description": "لینک فعال‌سازی به {email} ارسال شد. روی آن کلیک کنید تا حساب‌تان فعال شود.",
+      "descriptionNoEmail": "ایمیل فعال‌سازی برای شما ارسال شد. روی لینک داخل آن کلیک کنید تا حساب‌تان فعال شود.",
+      "resend": "ارسال دوباره‌ی ایمیل فعال‌سازی",
+      "resent": "ایمیل فعال‌سازی ارسال شد.",
+      "backToSignIn": "بازگشت به صفحه‌ی ورود"
+    },
+    "activate": {
+      "pendingTitle": "در حال فعال‌سازی حساب…",
+      "successTitle": "حساب فعال شد",
+      "successDescription": "اکنون می‌توانید وارد شوید.",
+      "errorTitle": "فعال‌سازی ناموفق بود",
+      "errorDescription": "ممکن است لینک فعال‌سازی منقضی شده یا قبلاً استفاده شده باشد.",
+      "goToSignIn": "رفتن به صفحه‌ی ورود",
+      "resend": "درخواست لینک جدید"
+    },
+    "forgotPassword": {
+      "title": "بازیابی گذرواژه",
+      "description": "ایمیل حساب خود را وارد کنید تا لینک بازیابی ارسال شود.",
+      "submit": "ارسال لینک بازیابی",
+      "doneTitle": "ایمیل خود را بررسی کنید",
+      "doneDescription": "اگر حسابی با ایمیل {email} موجود باشد، لینک بازیابی ارسال می‌شود.",
+      "backToSignIn": "بازگشت به صفحه‌ی ورود"
+    },
+    "resetConfirm": {
+      "title": "انتخاب گذرواژه‌ی جدید",
+      "description": "گذرواژه‌ی جدید حساب خود را وارد کنید.",
+      "submit": "به‌روزرسانی گذرواژه",
+      "successTitle": "گذرواژه به‌روزرسانی شد",
+      "successDescription": "اکنون می‌توانید با گذرواژه‌ی جدید وارد شوید.",
+      "errorTitle": "به‌روزرسانی ناموفق بود",
+      "errorDescription": "ممکن است این لینک بازیابی منقضی شده یا قبلاً استفاده شده باشد.",
+      "requestNewLink": "درخواست لینک جدید"
+    },
+    "callback": {
+      "pendingTitle": "در حال تکمیل ورود…",
+      "errorTitle": "ورود ناموفق بود",
+      "errorDescription": "نتوانستیم ورود با گوگل را تکمیل کنیم. دوباره تلاش کنید.",
+      "retry": "بازگشت به صفحه‌ی ورود"
+    },
+    "account": {
+      "title": "حساب کاربری",
+      "profileTitle": "پروفایل",
+      "profileDescription": "نام خود را در QGraph به‌روزرسانی کنید.",
+      "profileSubmit": "ذخیره‌ی تغییرات",
+      "profileSaved": "پروفایل به‌روزرسانی شد.",
+      "changePasswordTitle": "تغییر گذرواژه",
+      "changePasswordDescription": "پس از تغییر گذرواژه همچنان وارد باقی می‌مانید.",
+      "changePasswordSubmit": "تغییر گذرواژه",
+      "passwordChanged": "گذرواژه تغییر کرد.",
+      "changeEmailTitle": "تغییر ایمیل",
+      "changeEmailDescription": "لینک تأیید به ایمیل جدید ارسال می‌شود.",
+      "changeEmailSubmit": "ارسال لینک تأیید",
+      "emailChangeRequested": "ایمیل تأیید به آدرس جدید ارسال شد.",
+      "deleteAccountTitle": "حذف حساب",
+      "deleteAccountDescription": "حساب شما و همه‌ی داده‌های مرتبط برای همیشه حذف می‌شوند. این عمل بازگشت‌پذیر نیست.",
+      "deleteAccountSubmit": "حذف حساب",
+      "deleteAccountConfirmTitle": "حذف حساب کاربری؟",
+      "deleteAccountConfirmDescription": "این کار حساب و تمام داده‌های شما را برای همیشه حذف می‌کند. این عمل بازگشت‌پذیر نیست.",
+      "deleteAccountConfirm": "بله، حذف کن",
+      "deleteAccountCancel": "لغو",
+      "signedOut": "از حساب خود خارج شدید.",
+      "signedInAs": "وارد شده با {email}"
+    },
+    "emailConfirm": {
+      "pendingTitle": "در حال تأیید ایمیل جدید…",
+      "successTitle": "ایمیل به‌روزرسانی شد",
+      "successDescription": "آدرس ایمیل شما تغییر کرد.",
+      "errorTitle": "به‌روزرسانی ایمیل ناموفق بود",
+      "errorDescription": "ممکن است این لینک تأیید منقضی شده یا قبلاً استفاده شده باشد.",
+      "continue": "ادامه"
+    },
+    "validation": {
+      "emailRequired": "ایمیل خود را وارد کنید.",
+      "emailInvalid": "یک ایمیل معتبر وارد کنید.",
+      "passwordRequired": "گذرواژه‌ی خود را وارد کنید.",
+      "passwordMin": "گذرواژه باید حداقل ۸ نویسه باشد.",
+      "passwordMax": "گذرواژه خیلی طولانی است.",
+      "passwordsMustMatch": "گذرواژه‌ها یکسان نیستند.",
+      "nameMax": "نام خیلی طولانی است."
+    },
+    "errors": {
+      "generic": "خطایی رخ داد. دوباره تلاش کنید.",
+      "network": "ارتباط با سرور برقرار نشد. اتصال خود را بررسی کنید."
+    },
+    "authError": {
+      "title": "خطا در احراز هویت",
+      "backToSignIn": "بازگشت به صفحه‌ی ورود",
+      "codes": {
+        "oauth_callback_failed": "تکمیل ورود با گوگل ممکن نشد. دوباره تلاش کنید.",
+        "unknown": "در فرایند احراز هویت خطایی رخ داد. دوباره تلاش کنید."
+      }
+    }
   }
 }

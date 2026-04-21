@@ -2,6 +2,9 @@
   "siteHeader": {
     "brand": "QGraph",
     "signIn": "Sign in",
+    "signUp": "Sign up",
+    "account": "Account",
+    "signOut": "Sign out",
     "languageMenuLabel": "Change language",
     "localeEn": "English",
     "localeFa": "فارسی",
@@ -46,5 +49,141 @@
     "placeholderQueryLabel": "You searched for",
     "placeholderEmpty": "No query provided.",
     "backToLanding": "← Back to landing"
+  },
+  "auth": {
+    "common": {
+      "email": "Email",
+      "password": "Password",
+      "newPassword": "New password",
+      "currentPassword": "Current password",
+      "confirmPassword": "Confirm password",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "submit": "Continue",
+      "back": "Back",
+      "loading": "Loading…",
+      "or": "or",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "emailPlaceholder": "you@example.com",
+      "passwordResetAcknowledged": "If an account exists for that email, we sent a reset link. Check your inbox.",
+      "continueAsGuest": "Continue as guest"
+    },
+    "signIn": {
+      "title": "Welcome back",
+      "description": "Sign in to your QGraph account.",
+      "submit": "Sign in",
+      "google": "Continue with Google",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create one",
+      "resetSuccessBanner": "Your password was reset. You can now sign in.",
+      "invalidCredentials": "Email or password is incorrect.",
+      "inactiveUser": "This account hasn't been activated yet. Check your email for the activation link.",
+      "resendActivation": "Resend activation email"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "description": "Use your email and a password, or continue with Google.",
+      "submit": "Create account",
+      "google": "Sign up with Google",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "termsHint": "By signing up, you agree to the terms of use."
+    },
+    "checkEmail": {
+      "title": "Check your email",
+      "description": "We sent an activation link to {email}. Click it to activate your account.",
+      "descriptionNoEmail": "We sent you an activation email. Click the link inside to activate your account.",
+      "resend": "Resend activation email",
+      "resent": "Activation email sent.",
+      "backToSignIn": "Back to sign in"
+    },
+    "activate": {
+      "pendingTitle": "Activating your account…",
+      "successTitle": "Account activated",
+      "successDescription": "You can now sign in.",
+      "errorTitle": "Activation failed",
+      "errorDescription": "The activation link may have expired or already been used.",
+      "goToSignIn": "Go to sign in",
+      "resend": "Request a new link"
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "description": "Enter the email associated with your account. We'll send you a reset link.",
+      "submit": "Send reset link",
+      "doneTitle": "Check your email",
+      "doneDescription": "If an account exists for {email}, a reset link is on its way.",
+      "backToSignIn": "Back to sign in"
+    },
+    "resetConfirm": {
+      "title": "Choose a new password",
+      "description": "Enter a new password for your account.",
+      "submit": "Update password",
+      "successTitle": "Password updated",
+      "successDescription": "You can now sign in with your new password.",
+      "errorTitle": "Couldn't update password",
+      "errorDescription": "This reset link may have expired or already been used.",
+      "requestNewLink": "Request a new link"
+    },
+    "callback": {
+      "pendingTitle": "Finishing sign in…",
+      "errorTitle": "Sign in failed",
+      "errorDescription": "We couldn't complete sign in with Google. Please try again.",
+      "retry": "Back to sign in"
+    },
+    "account": {
+      "title": "Account",
+      "profileTitle": "Profile",
+      "profileDescription": "Update your name as it appears in QGraph.",
+      "profileSubmit": "Save changes",
+      "profileSaved": "Profile updated.",
+      "changePasswordTitle": "Change password",
+      "changePasswordDescription": "You'll stay signed in after changing your password.",
+      "changePasswordSubmit": "Change password",
+      "passwordChanged": "Password changed.",
+      "changeEmailTitle": "Change email",
+      "changeEmailDescription": "We'll send a confirmation link to the new address.",
+      "changeEmailSubmit": "Send confirmation",
+      "emailChangeRequested": "Confirmation email sent to the new address.",
+      "deleteAccountTitle": "Delete account",
+      "deleteAccountDescription": "Permanently delete your account and all associated data. This cannot be undone.",
+      "deleteAccountSubmit": "Delete account",
+      "deleteAccountConfirmTitle": "Delete your account?",
+      "deleteAccountConfirmDescription": "This permanently deletes your account and all data. This cannot be undone.",
+      "deleteAccountConfirm": "Yes, delete",
+      "deleteAccountCancel": "Cancel",
+      "signedOut": "You've been signed out.",
+      "signedInAs": "Signed in as {email}"
+    },
+    "emailConfirm": {
+      "pendingTitle": "Confirming your new email…",
+      "successTitle": "Email updated",
+      "successDescription": "Your email address was changed.",
+      "errorTitle": "Couldn't update email",
+      "errorDescription": "This confirmation link may have expired or already been used.",
+      "continue": "Continue"
+    },
+    "validation": {
+      "emailRequired": "Enter your email.",
+      "emailInvalid": "Enter a valid email address.",
+      "passwordRequired": "Enter your password.",
+      "passwordMin": "Password must be at least 8 characters.",
+      "passwordMax": "Password is too long.",
+      "passwordsMustMatch": "Passwords don't match.",
+      "nameMax": "Name is too long."
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "network": "Couldn't reach the server. Check your connection."
+    },
+    "authError": {
+      "title": "Authentication error",
+      "backToSignIn": "Back to sign in",
+      "codes": {
+        "oauth_callback_failed": "We couldn't complete the Google sign-in. Please try again.",
+        "unknown": "Something went wrong during authentication. Please try again."
+      }
+    }
   }
 }
