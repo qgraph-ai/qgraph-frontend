@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# QGraph Frontend
 
-## Getting Started
+The Next.js 16 (App Router) frontend for QGraph — a toolkit for studying the Qur'ān (read, segment, search) that talks to a Django backend and, later, a separate AI service.
 
-First, run the development server:
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npx playwright install chromium   # one-time, for E2E tests
+npm run dev                       # http://127.0.0.1:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The dev server expects a Django backend at `http://127.0.0.1:8000` for anything data-driven.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **[docs/development.md](./docs/development.md)** — running locally, command cheat-sheet, env vars.
+- **[docs/testing.md](./docs/testing.md)** — unit (Vitest) + E2E (Playwright): how to run, how to write.
+- **[docs/architecture.md](./docs/architecture.md)** — tour of `src/` (routes, features, services, lib, i18n).
+- **[CLAUDE.md](./CLAUDE.md)** — operational rules and conventions (authoritative).
+- **[.ai/bootstrap/](./.ai/bootstrap/)** — longer-form bootstrap docs (project overview, backend contract, frontend best practices).
 
-## Learn More
+## Most-used commands
 
-To learn more about Next.js, take a look at the following resources:
+| What | Command |
+| --- | --- |
+| Dev server | `npm run dev` |
+| Lint | `npm run lint` |
+| Type-check | `npx tsc --noEmit` |
+| Unit tests | `npm test` |
+| E2E tests | `npm run test:e2e` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Full list in [docs/development.md](./docs/development.md).
