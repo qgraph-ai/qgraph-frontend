@@ -8,18 +8,11 @@ import { Bismillah } from "@/features/quran/components/bismillah"
 import { SurahHeader } from "@/features/quran/components/surah-header"
 import { SurahPager } from "@/features/quran/components/surah-pager"
 import {
-  SURAH_COUNT,
   SURAH_FATIHA_NUMBER,
   SURAH_TAWBAH_NUMBER,
 } from "@/features/quran/lib/constants"
+import { parseSurahNumber } from "@/features/quran/lib/parse"
 import { getSurah } from "@/services/quran"
-
-function parseSurahNumber(raw: string): number | null {
-  if (!/^\d+$/.test(raw)) return null
-  const n = Number(raw)
-  if (!Number.isInteger(n) || n < 1 || n > SURAH_COUNT) return null
-  return n
-}
 
 type Params = Promise<{ surah: string }>
 

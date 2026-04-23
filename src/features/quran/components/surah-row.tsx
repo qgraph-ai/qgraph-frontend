@@ -3,7 +3,13 @@ import Link from "next/link"
 import { RevelationBadge } from "@/features/quran/components/revelation-badge"
 import type { Surah } from "@/services/quran"
 
-export function SurahRow({ surah }: { surah: Surah }) {
+export function SurahRow({
+  surah,
+  revelationLabel,
+}: {
+  surah: Surah
+  revelationLabel?: string
+}) {
   return (
     <Link
       href={`/quran/${surah.number}`}
@@ -38,8 +44,8 @@ export function SurahRow({ surah }: { surah: Surah }) {
             {surah.ayah_count}
           </span>
         ) : null}
-        {surah.revelation_place ? (
-          <RevelationBadge place={surah.revelation_place} />
+        {surah.revelation_place && revelationLabel ? (
+          <RevelationBadge place={surah.revelation_place} label={revelationLabel} />
         ) : null}
       </span>
     </Link>
