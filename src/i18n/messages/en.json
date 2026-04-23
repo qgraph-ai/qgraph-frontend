@@ -185,5 +185,35 @@
         "unknown": "Something went wrong during authentication. Please try again."
       }
     }
+  },
+  "quran": {
+    "index": {
+      "kicker": "The Qur'ān",
+      "title": "One hundred and fourteen surahs.",
+      "subtitle": "Read the canonical Arabic text, surah by surah.",
+      "count": "{count} surahs"
+    },
+    "reader": {
+      "kickerTemplate": "Surah {number}",
+      "ayahCount": "{count} āyāt",
+      "meccan": "Meccan",
+      "medinan": "Medinan",
+      "prevSurah": "Previous",
+      "nextSurah": "Next",
+      "pagerLabel": "Surah navigation",
+      "ayahStreamLabel": "Ayahs",
+      "backToIndex": "← All surahs"
+    },
+    "notFound": {
+      "title": "Surah not found.",
+      "body": "There are one hundred and fourteen surahs in the Qur'ān.",
+      "backToIndex": "Back to the index"
+    },
+    "error": {
+      "title": "Couldn't load this.",
+      "body": "Something went wrong reaching the scripture service. Try again.",
+      "retry": "Try again",
+      "backToIndex": "Back to the index"
+    }
   }
 }
