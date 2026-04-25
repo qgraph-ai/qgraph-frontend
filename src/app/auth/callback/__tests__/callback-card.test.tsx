@@ -16,6 +16,7 @@ vi.mock("@/features/auth/use-auth", () => ({
 }))
 
 import { CallbackCard } from "@/app/auth/callback/callback-card"
+import { setPostAuthReturnTo } from "@/lib/navigation/post-auth-return"
 
 describe("CallbackCard", () => {
   it("renders a retry state when callback has an error", () => {
@@ -45,6 +46,21 @@ describe("CallbackCard", () => {
 
     await waitFor(() => {
       expect(mockRouter.replace).toHaveBeenCalledWith("/")
+      expect(mockRouter.refresh).toHaveBeenCalled()
+    })
+  })
+
+  it("falls back to stored post-auth return path when callback next is root", async () => {
+    setPostAuthReturnTo("/search?q=rahma")
+    useAuthMock.mockReturnValue({
+      status: "authenticated",
+      refetch: vi.fn(),
+    })
+
+    renderWithProviders(<CallbackCard errorCode={null} nextPath="/" />)
+
+    await waitFor(() => {
+      expect(mockRouter.replace).toHaveBeenCalledWith("/search?q=rahma")
       expect(mockRouter.refresh).toHaveBeenCalled()
     })
   })

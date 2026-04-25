@@ -2,7 +2,7 @@
 
 import { LogOut, User } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
 import toast from "react-hot-toast"
 
@@ -19,6 +19,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { useAuth } from "@/features/auth/use-auth"
 import { useLogout } from "@/features/auth/use-logout"
+import { sanitizeReturnTo } from "@/lib/navigation/sanitize-return-to"
 
 function initialsFor(email: string, firstName?: string | null, lastName?: string | null) {
   if (firstName || lastName) {
@@ -27,10 +28,23 @@ function initialsFor(email: string, firstName?: string | null, lastName?: string
   return email[0]?.toUpperCase() ?? "?"
 }
 
+export function buildSignInHref(
+  pathname: string,
+  queryString: string
+): string {
+  const candidate = `${pathname}${queryString ? `?${queryString}` : ""}`
+  const safeReturnTo = sanitizeReturnTo(candidate, "/")
+  if (safeReturnTo === "/") return "/auth/sign-in"
+  return `/auth/sign-in?next=${encodeURIComponent(safeReturnTo)}`
+}
+
 export function UserMenu() {
   const t = useTranslations("siteHeader")
   const tAuth = useTranslations("auth")
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const signInHref = buildSignInHref(pathname, searchParams.toString())
   const { status, user } = useAuth()
   const logout = useLogout()
 
@@ -42,7 +56,7 @@ export function UserMenu() {
     return (
       <div className="flex items-center gap-1">
         <Button asChild variant="ghost" size="sm">
-          <Link href="/auth/sign-in">{t("signIn")}</Link>
+          <Link href={signInHref}>{t("signIn")}</Link>
         </Button>
         <Button asChild size="sm">
           <Link href="/auth/sign-up">{t("signUp")}</Link>

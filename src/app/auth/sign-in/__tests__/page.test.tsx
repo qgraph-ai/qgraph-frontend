@@ -34,4 +34,21 @@ describe("SignInPage", () => {
       undefined
     )
   })
+
+  it("passes safe internal `next` path to SignInForm", async () => {
+    const element = await SignInPage({
+      searchParams: Promise.resolve({
+        next: "/search",
+      }),
+    })
+    renderWithProviders(element)
+
+    expect(signInFormMock).toHaveBeenCalledWith(
+      {
+        resetSuccess: false,
+        nextPath: "/search",
+      },
+      undefined
+    )
+  })
 })

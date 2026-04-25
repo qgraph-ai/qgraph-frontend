@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { CSRF_COOKIE_NAME, getCsrfFromCookie } from "@/lib/api"
 import { API_URL } from "@/lib/env"
+import { setPostAuthReturnTo } from "@/lib/navigation/post-auth-return"
 import { logger } from "@/lib/observability/logger"
 import { AUTH_PATHS, buildGoogleLoginFormTarget } from "@/services/auth"
 
@@ -30,7 +31,13 @@ function warnIfHostMismatch() {
   }
 }
 
-export function GoogleLoginButton({ label }: { label: string }) {
+export function GoogleLoginButton({
+  label,
+  returnTo = "/",
+}: {
+  label: string
+  returnTo?: string
+}) {
   const [csrfToken, setCsrfToken] = useState<string | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -58,6 +65,8 @@ export function GoogleLoginButton({ label }: { label: string }) {
       })
       return
     }
+
+    setPostAuthReturnTo(returnTo)
   }
 
   return (

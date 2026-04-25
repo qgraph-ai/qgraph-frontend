@@ -92,6 +92,36 @@ describe("SignInForm", () => {
     })
   })
 
+  it("falls back guest-back link to '/' when nextPath is an auth route", async () => {
+    renderWithProviders(
+      <SignInForm resetSuccess={false} nextPath="/auth/account" />
+    )
+
+    const guestLink = screen.getByRole("link", { name: /continue as guest/i })
+    expect(guestLink).toHaveAttribute("href", "/")
+  })
+
+  it("uses same-origin referrer when nextPath is root", async () => {
+    Object.defineProperty(document, "referrer", {
+      configurable: true,
+      value: "http://localhost:3000/search?q=rahma",
+    })
+
+    const user = userEvent.setup()
+    renderWithProviders(<SignInForm resetSuccess={false} nextPath="/" />)
+
+    const guestLink = screen.getByRole("link", { name: /continue as guest/i })
+    expect(guestLink).toHaveAttribute("href", "/search?q=rahma")
+
+    await user.type(screen.getByLabelText(/email/i), "user@example.com")
+    await user.type(screen.getByLabelText(/^password$/i), "correct-password")
+    await user.click(screen.getByRole("button", { name: /sign in/i }))
+
+    await waitFor(() => {
+      expect(mockRouter.replace).toHaveBeenCalledWith("/search?q=rahma")
+    })
+  })
+
   it("shows a generic error for non-401 failures", async () => {
     server.use(
       http.post(`${API_URL}/api/auth/jwt/create/`, () =>

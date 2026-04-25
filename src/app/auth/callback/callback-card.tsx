@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { AuthCard } from "@/features/auth/components/auth-card"
 import { useAuth } from "@/features/auth/use-auth"
+import { consumePostAuthReturnTo } from "@/lib/navigation/post-auth-return"
 import { sanitizeReturnTo } from "@/lib/navigation/sanitize-return-to"
 
 export function CallbackCard({
@@ -31,7 +32,9 @@ export function CallbackCard({
   useEffect(() => {
     if (errorCode) return
     if (status === "authenticated") {
-      router.replace(safeNextPath)
+      const target =
+        safeNextPath === "/" ? consumePostAuthReturnTo("/") : safeNextPath
+      router.replace(target)
       router.refresh()
     }
   }, [errorCode, router, safeNextPath, status])

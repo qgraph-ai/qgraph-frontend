@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { useForm } from "react-hook-form"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import toast from "react-hot-toast"
 
@@ -45,6 +45,37 @@ function isInactiveAccountError(error: NormalizedApiError): boolean {
   return codeCandidates.some((candidate) => candidate === "inactive_user")
 }
 
+function guestBackHrefFor(nextPath: string): string {
+  // Avoid redirect loops when signin is reached from protected auth routes.
+  if (nextPath.startsWith("/auth/")) return "/"
+  return nextPath
+}
+
+function inferSameOriginReferrerPath(): string | null {
+  if (typeof window === "undefined") return null
+  if (!document.referrer) return null
+
+  try {
+    const referrer = new URL(document.referrer)
+    if (referrer.origin !== window.location.origin) return null
+    return `${referrer.pathname}${referrer.search}`
+  } catch {
+    return null
+  }
+}
+
+function resolveReturnTo(nextPath: string): string {
+  const safeNextPath = sanitizeReturnTo(nextPath)
+  if (safeNextPath !== "/") return safeNextPath
+
+  const referrerPath = inferSameOriginReferrerPath()
+  if (!referrerPath) return "/"
+
+  const safeReferrerPath = sanitizeReturnTo(referrerPath)
+  if (safeReferrerPath.startsWith("/auth/")) return "/"
+  return safeReferrerPath
+}
+
 export function SignInForm({
   resetSuccess,
   nextPath,
@@ -62,7 +93,8 @@ export function SignInForm({
   const router = useRouter()
   const [formError, setFormError] = useState<string | null>(null)
   const [inactiveEmail, setInactiveEmail] = useState<string | null>(null)
-  const safeNextPath = sanitizeReturnTo(nextPath)
+  const returnTo = useMemo(() => resolveReturnTo(nextPath), [nextPath])
+  const guestBackHref = guestBackHrefFor(returnTo)
 
   const login = useLogin()
   const resend = useResendActivation()
@@ -77,7 +109,7 @@ export function SignInForm({
     setInactiveEmail(null)
     login.mutate(values, {
       onSuccess: () => {
-        router.replace(safeNextPath)
+        router.replace(returnTo)
         router.refresh()
       },
       onError: (error) => {
@@ -116,7 +148,7 @@ export function SignInForm({
       title={t("signIn.title")}
       description={t("signIn.description")}
       guestBack={{
-        href: safeNextPath,
+        href: guestBackHref,
         label: t("common.continueAsGuest"),
       }}
       footer={
@@ -224,7 +256,7 @@ export function SignInForm({
         <Separator className="flex-1" />
       </div>
 
-      <GoogleLoginButton label={t("signIn.google")} />
+      <GoogleLoginButton label={t("signIn.google")} returnTo={returnTo} />
     </AuthCard>
   )
 }

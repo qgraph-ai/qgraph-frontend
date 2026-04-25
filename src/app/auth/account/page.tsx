@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server"
 
-import { requireAuth } from "@/lib/auth/require-auth.server"
+import { getServerSession } from "@/lib/auth/session.server"
 
 import { AccountPageClient } from "./account-page-client"
 
@@ -13,6 +13,6 @@ export async function generateMetadata() {
 }
 
 export default async function AccountPage() {
-  const user = await requireAuth("/auth/account")
+  const user = await getServerSession()
   return <AccountPageClient initialUser={user} />
 }
