@@ -3,23 +3,17 @@
 import { useMutation } from "@tanstack/react-query"
 
 import type { NormalizedApiError } from "@/lib/api"
+import { logger } from "@/lib/observability/logger"
 import { setEmail, type SetEmailPayload } from "@/services/auth"
 
 export function useSetEmail() {
   return useMutation<void, NormalizedApiError, SetEmailPayload>({
-    mutationFn: (vars) => {
-      console.info(
-        `[auth-debug] useSetEmail.mutationFn: new_email='${vars.new_email}' (password redacted)`
-      )
-      return setEmail(vars)
-    },
-    onSuccess: () => {
-      console.info("[auth-debug] useSetEmail.onSuccess")
-    },
+    mutationFn: setEmail,
     onError: (err) => {
-      console.warn(
-        `[auth-debug] useSetEmail.onError: status=${err.status} message='${err.message}' details=${JSON.stringify(err.details)?.slice(0, 500)}`
-      )
+      logger.warn("Set email request failed", {
+        status: err.status,
+        code: err.code,
+      })
     },
   })
 }

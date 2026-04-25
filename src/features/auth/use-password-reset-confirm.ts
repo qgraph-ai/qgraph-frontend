@@ -3,6 +3,7 @@
 import { useMutation } from "@tanstack/react-query"
 
 import type { NormalizedApiError } from "@/lib/api"
+import { logger } from "@/lib/observability/logger"
 import {
   confirmPasswordReset,
   type ResetPasswordConfirmPayload,
@@ -10,19 +11,12 @@ import {
 
 export function usePasswordResetConfirm() {
   return useMutation<void, NormalizedApiError, ResetPasswordConfirmPayload>({
-    mutationFn: (vars) => {
-      console.info(
-        `[auth-debug] usePasswordResetConfirm.mutationFn: uid='${vars.uid}' tokenLen=${vars.token?.length ?? 0} (new_password redacted)`
-      )
-      return confirmPasswordReset(vars)
-    },
-    onSuccess: () => {
-      console.info("[auth-debug] usePasswordResetConfirm.onSuccess")
-    },
+    mutationFn: confirmPasswordReset,
     onError: (err) => {
-      console.warn(
-        `[auth-debug] usePasswordResetConfirm.onError: status=${err.status} message='${err.message}' details=${JSON.stringify(err.details)?.slice(0, 500)}`
-      )
+      logger.warn("Password reset confirmation failed", {
+        status: err.status,
+        code: err.code,
+      })
     },
   })
 }

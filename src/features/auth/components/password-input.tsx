@@ -33,7 +33,6 @@ export function PasswordInput({
         className="absolute end-0.5 top-1/2 -translate-y-1/2"
         onClick={() => setVisible((v) => !v)}
         aria-label={visible ? toggleAriaLabelHide : toggleAriaLabelShow}
-        tabIndex={-1}
       >
         {visible ? <EyeOff /> : <Eye />}
       </Button>

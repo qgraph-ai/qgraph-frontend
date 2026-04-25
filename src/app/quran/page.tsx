@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 
 import { BrandOrnament } from "@/components/brand-mark"
@@ -6,6 +7,25 @@ import { SiteHeader } from "@/components/site-header"
 import { Separator } from "@/components/ui/separator"
 import { SurahIndex } from "@/features/quran/components/surah-index"
 import { SURAH_COUNT } from "@/features/quran/lib/constants"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("quran.index")
+  return {
+    title: t("title"),
+    description: t("metaDescription"),
+    alternates: { canonical: "/quran" },
+    openGraph: {
+      title: t("title"),
+      description: t("metaDescription"),
+      url: "/quran",
+    },
+    twitter: {
+      card: "summary",
+      title: t("title"),
+      description: t("metaDescription"),
+    },
+  }
+}
 
 export default async function QuranIndexPage() {
   const t = await getTranslations("quran.index")

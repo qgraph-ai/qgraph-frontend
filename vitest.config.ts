@@ -20,5 +20,22 @@ export default defineConfig({
     env: {
       NEXT_PUBLIC_API_URL: "http://127.0.0.1:8000",
     },
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html", "lcov"],
+      exclude: [
+        "src/**/*.d.ts",
+        "src/**/*.server.ts",
+        "src/**/__tests__/**",
+        "src/app/**/loading.tsx",
+        "src/app/**/error.tsx",
+      ],
+      thresholds: {
+        statements: 85,
+        lines: 85,
+        functions: 85,
+        branches: 75,
+      },
+    },
   },
 })

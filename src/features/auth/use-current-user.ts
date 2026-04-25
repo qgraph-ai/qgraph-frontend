@@ -10,12 +10,7 @@ import { AUTH_QUERY_KEYS } from "./query-keys"
 export function useCurrentUser() {
   return useQuery<CurrentUser, NormalizedApiError>({
     queryKey: AUTH_QUERY_KEYS.me,
-    queryFn: () => {
-      console.info(
-        "[auth-debug] useCurrentUser.queryFn: fetching session via getCurrentUser()"
-      )
-      return getCurrentUser()
-    },
+    queryFn: getCurrentUser,
     retry: false,
     staleTime: 60_000,
   })

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
@@ -21,16 +22,34 @@ export async function generateMetadata({
 }: {
   params: Params
 }): Promise<Metadata> {
+  const t = await getTranslations("quran.readerMetadata")
   const { surah } = await params
   const number = parseSurahNumber(surah)
   if (number === null) return {}
   try {
     const data = await getSurah(number)
-    const title = `Surah ${data.transliteration}`
+    const title = t("title", { transliteration: data.transliteration })
     const description = data.english_name
-      ? `Read surah ${data.transliteration} (${data.english_name}) in Arabic.`
-      : `Read surah ${data.transliteration} in Arabic.`
-    return { title, description }
+      ? t("descriptionWithEnglishName", {
+          transliteration: data.transliteration,
+          englishName: data.english_name,
+        })
+      : t("description", { transliteration: data.transliteration })
+    return {
+      title,
+      description,
+      alternates: { canonical: `/quran/${data.number}` },
+      openGraph: {
+        title,
+        description,
+        url: `/quran/${data.number}`,
+      },
+      twitter: {
+        card: "summary",
+        title,
+        description,
+      },
+    }
   } catch {
     return {}
   }

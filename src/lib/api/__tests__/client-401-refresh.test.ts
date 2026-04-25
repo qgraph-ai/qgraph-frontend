@@ -114,4 +114,33 @@ describe("apiClient 401 refresh", () => {
     ).rejects.toMatchObject({ status: 401 })
     expect(refreshCalls).toBe(0)
   })
+
+  it("retries GET /api/auth/users/me/ after refresh", async () => {
+    let refreshCalls = 0
+    let meCalls = 0
+    server.use(
+      http.get(`${API_URL}/api/auth/users/me/`, () => {
+        meCalls += 1
+        if (meCalls === 1) {
+          return HttpResponse.json({ detail: "unauth" }, { status: 401 })
+        }
+        return HttpResponse.json({
+          id: 1,
+          email: "user@example.com",
+          first_name: "User",
+          last_name: "Test",
+        })
+      }),
+      http.post(`${API_URL}/api/auth/jwt/refresh/`, () => {
+        refreshCalls += 1
+        return HttpResponse.json({}, { status: 200 })
+      })
+    )
+
+    const response = await apiClient.get("/api/auth/users/me/")
+
+    expect(response.status).toBe(200)
+    expect(refreshCalls).toBe(1)
+    expect(meCalls).toBe(2)
+  })
 })

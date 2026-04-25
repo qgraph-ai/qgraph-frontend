@@ -21,7 +21,9 @@ function ayah(partial: Partial<Ayah> = {}): Ayah {
 
 describe("AyahBlock", () => {
   it("renders arabic text and a deep-link anchor for the ayah number", () => {
-    renderWithProviders(<AyahBlock ayah={ayah()} />)
+    renderWithProviders(
+      <AyahBlock ayah={ayah()} srLabel="Ayah 7 of surah 1" />
+    )
     expect(
       screen.getByText(/ٱلَّذِينَ أَنْعَمْتَ/)
     ).toBeInTheDocument()
@@ -31,14 +33,22 @@ describe("AyahBlock", () => {
   })
 
   it("renders the end-of-ayah marker with Arabic-Indic digits", () => {
-    renderWithProviders(<AyahBlock ayah={ayah({ number_in_surah: 286 })} />)
+    renderWithProviders(
+      <AyahBlock
+        ayah={ayah({ number_in_surah: 286 })}
+        srLabel="Ayah 286 of surah 1"
+      />
+    )
     // U+06DD + Arabic-Indic digits for 286 = ٢٨٦
     expect(screen.getByText(/۝٢٨٦/)).toBeInTheDocument()
   })
 
   it("includes a screen-reader label with the ayah ordinal", () => {
     renderWithProviders(
-      <AyahBlock ayah={ayah({ number_in_surah: 42, surah_number: 2 })} />
+      <AyahBlock
+        ayah={ayah({ number_in_surah: 42, surah_number: 2 })}
+        srLabel="Ayah 42 of surah 2"
+      />
     )
     expect(screen.getByText(/Ayah 42 of surah 2/i)).toBeInTheDocument()
   })

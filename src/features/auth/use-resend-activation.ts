@@ -3,6 +3,7 @@
 import { useMutation } from "@tanstack/react-query"
 
 import type { NormalizedApiError } from "@/lib/api"
+import { logger } from "@/lib/observability/logger"
 import {
   resendActivation,
   type ResendActivationPayload,
@@ -10,19 +11,12 @@ import {
 
 export function useResendActivation() {
   return useMutation<void, NormalizedApiError, ResendActivationPayload>({
-    mutationFn: (vars) => {
-      console.info(
-        `[auth-debug] useResendActivation.mutationFn: email='${vars.email}'`
-      )
-      return resendActivation(vars)
-    },
-    onSuccess: () => {
-      console.info("[auth-debug] useResendActivation.onSuccess")
-    },
+    mutationFn: resendActivation,
     onError: (err) => {
-      console.warn(
-        `[auth-debug] useResendActivation.onError: status=${err.status} message='${err.message}'`
-      )
+      logger.warn("Resend activation request failed", {
+        status: err.status,
+        code: err.code,
+      })
     },
   })
 }

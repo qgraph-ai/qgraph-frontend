@@ -1,7 +1,7 @@
 import { toArabicDigits } from "@/features/quran/lib/format"
 import type { Ayah } from "@/services/quran"
 
-export function AyahBlock({ ayah }: { ayah: Ayah }) {
+export function AyahBlock({ ayah, srLabel }: { ayah: Ayah; srLabel: string }) {
   return (
     <li
       id={`ayah-${ayah.number_in_surah}`}
@@ -21,9 +21,7 @@ export function AyahBlock({ ayah }: { ayah: Ayah }) {
           {toArabicDigits(ayah.number_in_surah)}
         </span>
       </p>
-      <span className="sr-only">
-        Ayah {ayah.number_in_surah} of surah {ayah.surah_number}
-      </span>
+      <span className="sr-only">{srLabel}</span>
     </li>
   )
 }

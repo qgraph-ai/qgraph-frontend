@@ -3,6 +3,7 @@
 import { useMutation } from "@tanstack/react-query"
 
 import type { NormalizedApiError } from "@/lib/api"
+import { logger } from "@/lib/observability/logger"
 import {
   registerUser,
   type CurrentUser,
@@ -11,21 +12,12 @@ import {
 
 export function useRegister() {
   return useMutation<CurrentUser, NormalizedApiError, RegisterPayload>({
-    mutationFn: (vars) => {
-      console.info(
-        `[auth-debug] useRegister.mutationFn: submitting email='${vars.email}' (passwords redacted)`
-      )
-      return registerUser(vars)
-    },
-    onSuccess: (user) => {
-      console.info(
-        `[auth-debug] useRegister.onSuccess: user.id=${user?.id} email='${user?.email}'`
-      )
-    },
+    mutationFn: registerUser,
     onError: (err) => {
-      console.warn(
-        `[auth-debug] useRegister.onError: status=${err.status} code=${err.code} message='${err.message}' details=${JSON.stringify(err.details)?.slice(0, 500)}`
-      )
+      logger.warn("Sign-up request failed", {
+        status: err.status,
+        code: err.code,
+      })
     },
   })
 }

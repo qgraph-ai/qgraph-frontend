@@ -7,6 +7,7 @@ Two layers: **Vitest** for unit/component tests (the default), **Playwright** fo
 | What | Command |
 | --- | --- |
 | Run all unit/component tests once | `npm test` |
+| Run unit/component tests with coverage | `npm run test:coverage` |
 | Watch mode | `npm run test:watch` |
 | Run a single unit test file | `npx vitest run path/to/file.test.ts` |
 | Filter by test name | `npx vitest run -t "renders the hero"` |
@@ -16,8 +17,57 @@ Two layers: **Vitest** for unit/component tests (the default), **Playwright** fo
 | Run one E2E file | `npx playwright test tests/e2e/landing.spec.ts` |
 | Run E2E in headed browser (see the window) | `npx playwright test --headed` |
 | Debug a single E2E step | `npx playwright test --debug` |
+| Headless run with full traces + open report | `npx playwright test --trace=on && npx playwright show-report` |
 
 Playwright auto-starts `npm run dev` and reuses an existing dev server when present. No manual server orchestration needed.
+Playwright also auto-starts a local mock API backend for E2E on `http://127.0.0.1:18000`, so it does not conflict with your Django dev backend on `:8000`.
+
+## Visual Artifacts For Passed Tests
+
+Default config is intentionally optimized for speed and disk usage:
+
+- traces only on first retry
+- screenshots only on failure
+- videos retained only on failure
+
+If you want richer debug output while exploring tests locally, use this copy-paste command:
+
+```bash
+npx playwright test --trace=on
+npx playwright show-report
+```
+
+For full artifacts (video + screenshot + trace) on passed tests, create a small override config:
+
+```ts
+// playwright.debug.config.ts
+import base from "./playwright.config"
+import { defineConfig } from "@playwright/test"
+
+export default defineConfig({
+  ...base,
+  use: {
+    ...base.use,
+    trace: "on",
+    video: "on",
+    screenshot: "on",
+  },
+})
+```
+
+Then run:
+
+```bash
+npx playwright test -c playwright.debug.config.ts
+npx playwright show-report
+```
+
+Coverage thresholds are enforced in `vitest.config.ts`:
+
+- statements >= 85%
+- lines >= 85%
+- functions >= 85%
+- branches >= 75%
 
 ## Unit / component tests (Vitest)
 
@@ -97,7 +147,10 @@ Specs end in `.spec.ts` (matches `testMatch: /.*\.spec\.ts$/`). Vitest explicitl
 
 - `testDir: "./tests/e2e"`, chromium-only (add firefox/webkit later if needed).
 - `baseURL: http://127.0.0.1:3000` — use `page.goto("/quran")` not an absolute URL.
-- `webServer` auto-runs `npm run dev`; `reuseExistingServer: true` in dev; `120s` startup timeout.
+- `webServer` auto-runs `npm run dev` plus `tests/e2e/mock-backend.mjs`.
+- E2E mock backend runs on `127.0.0.1:18000`.
+- Next dev server for E2E is started with `NEXT_PUBLIC_API_URL=http://127.0.0.1:18000`.
+- `reuseExistingServer: true` in dev; `120s` startup timeout.
 - `trace: "on-first-retry"`, `screenshot: "only-on-failure"`, `video: "retain-on-failure"`.
 - `forbidOnly: true` + `retries: 2` in CI (via the `CI` env var).
 
@@ -126,7 +179,7 @@ test.describe("quran reader", () => {
 })
 ```
 
-**Backend dependency.** The webServer inherits your shell env, so Next.js will hit whatever `NEXT_PUBLIC_API_URL` points at. For E2E specs that need backend data, either run Django locally first or stub HTTP per-test with `page.route(...)`:
+**Backend dependency.** By default, E2E uses the local mock backend (`:18000`), not Django (`:8000`). For a specific spec, you can still stub HTTP per-test with `page.route(...)`:
 
 ```ts
 await page.route("**/api/v1/quran/surahs/", (route) =>

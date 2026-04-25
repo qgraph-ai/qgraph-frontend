@@ -1,8 +1,28 @@
 import { getTranslations } from "next-intl/server"
-import Link from "next/link"
+import type { Metadata } from "next"
 
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
+import { ComingSoonShell } from "@/features/coming-soon/components/coming-soon-shell"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("search")
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+    alternates: { canonical: "/search" },
+    openGraph: {
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+      url: "/search",
+    },
+    twitter: {
+      card: "summary",
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+    },
+  }
+}
 
 export default async function SearchPlaceholderPage({
   searchParams,
@@ -17,27 +37,14 @@ export default async function SearchPlaceholderPage({
     <>
       <SiteHeader />
       <main className="flex-1">
-        <div className="mx-auto flex max-w-2xl flex-col items-center gap-8 px-6 py-24 text-center md:py-32">
-          <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
-            {t("placeholderTitle")}
-          </h1>
-          {trimmed ? (
-            <p className="flex flex-col items-center gap-2 text-muted-foreground">
-              <span className="text-xs uppercase tracking-wide">
-                {t("placeholderQueryLabel")}
-              </span>
-              <span className="text-lg text-foreground">{trimmed}</span>
-            </p>
-          ) : (
-            <p className="text-muted-foreground">{t("placeholderEmpty")}</p>
-          )}
-          <Link
-            href="/"
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            {t("backToLanding")}
-          </Link>
-        </div>
+        <ComingSoonShell
+          title={t("placeholderTitle")}
+          description={t("placeholderDescription")}
+          queryLabel={t("placeholderQueryLabel")}
+          queryValue={trimmed}
+          emptyQueryLabel={t("placeholderEmpty")}
+          backToLandingLabel={t("backToLanding")}
+        />
       </main>
       <SiteFooter />
     </>

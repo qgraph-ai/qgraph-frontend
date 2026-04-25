@@ -14,7 +14,14 @@ export async function AyahStream({ surahNumber }: { surahNumber: number }) {
         className="mx-auto max-w-2xl divide-y divide-border/40 text-start"
       >
         {ayahs.map((ayah) => (
-          <AyahBlock key={ayah.number_global} ayah={ayah} />
+          <AyahBlock
+            key={ayah.number_global}
+            ayah={ayah}
+            srLabel={t("ayahScreenReaderLabel", {
+              ayah: ayah.number_in_surah,
+              surah: ayah.surah_number,
+            })}
+          />
         ))}
       </ol>
     </section>

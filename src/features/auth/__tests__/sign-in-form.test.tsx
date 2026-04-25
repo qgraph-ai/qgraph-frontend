@@ -12,7 +12,7 @@ import { renderWithProviders, screen, waitFor } from "../../../../tests/test-uti
 describe("SignInForm", () => {
   it("shows validation errors when fields are empty", async () => {
     const user = userEvent.setup()
-    renderWithProviders(<SignInForm resetSuccess={false} nextPath={null} />)
+    renderWithProviders(<SignInForm resetSuccess={false} nextPath="/" />)
 
     await user.click(screen.getByRole("button", { name: /sign in/i }))
 
@@ -22,7 +22,9 @@ describe("SignInForm", () => {
 
   it("navigates to '/' on successful sign-in", async () => {
     const user = userEvent.setup()
-    renderWithProviders(<SignInForm resetSuccess={false} nextPath={null} />)
+    renderWithProviders(
+      <SignInForm resetSuccess={false} nextPath="https://evil.example/hijack" />
+    )
 
     await user.type(screen.getByLabelText(/email/i), "user@example.com")
     await user.type(screen.getByLabelText(/^password$/i), "correct-password")
@@ -35,7 +37,7 @@ describe("SignInForm", () => {
 
   it("surfaces an invalid-credentials error on 401", async () => {
     const user = userEvent.setup()
-    renderWithProviders(<SignInForm resetSuccess={false} nextPath={null} />)
+    renderWithProviders(<SignInForm resetSuccess={false} nextPath="/" />)
 
     await user.type(screen.getByLabelText(/email/i), "user@example.com")
     await user.type(screen.getByLabelText(/^password$/i), "wrong")
@@ -44,6 +46,9 @@ describe("SignInForm", () => {
     expect(
       await screen.findByText(/email or password is incorrect/i)
     ).toBeInTheDocument()
+    expect(
+      screen.queryByRole("button", { name: /resend activation email/i })
+    ).not.toBeInTheDocument()
     expect(mockRouter.replace).not.toHaveBeenCalled()
   })
 
@@ -51,20 +56,56 @@ describe("SignInForm", () => {
     server.use(
       http.post(`${API_URL}/api/auth/jwt/create/`, () =>
         HttpResponse.json(
-          { detail: "No active account found with the given credentials" },
+          {
+            code: "inactive_user",
+            detail: "This user account is disabled.",
+          },
           { status: 401 }
         )
       )
     )
     const user = userEvent.setup()
-    renderWithProviders(<SignInForm resetSuccess={false} nextPath={null} />)
+    renderWithProviders(<SignInForm resetSuccess={false} nextPath="/" />)
 
     await user.type(screen.getByLabelText(/email/i), "user@example.com")
     await user.type(screen.getByLabelText(/^password$/i), "correct-password")
     await user.click(screen.getByRole("button", { name: /sign in/i }))
 
     expect(
+      await screen.findByText(/hasn't been activated yet/i)
+    ).toBeInTheDocument()
+    expect(
       await screen.findByRole("button", { name: /resend activation email/i })
     ).toBeInTheDocument()
+  })
+
+  it("redirects to a safe internal nextPath when provided", async () => {
+    const user = userEvent.setup()
+    renderWithProviders(<SignInForm resetSuccess={false} nextPath="/quran/1" />)
+
+    await user.type(screen.getByLabelText(/email/i), "user@example.com")
+    await user.type(screen.getByLabelText(/^password$/i), "correct-password")
+    await user.click(screen.getByRole("button", { name: /sign in/i }))
+
+    await waitFor(() => {
+      expect(mockRouter.replace).toHaveBeenCalledWith("/quran/1")
+    })
+  })
+
+  it("shows a generic error for non-401 failures", async () => {
+    server.use(
+      http.post(`${API_URL}/api/auth/jwt/create/`, () =>
+        HttpResponse.json({ detail: "server down" }, { status: 500 })
+      )
+    )
+
+    const user = userEvent.setup()
+    renderWithProviders(<SignInForm resetSuccess={false} nextPath="/" />)
+
+    await user.type(screen.getByLabelText(/email/i), "user@example.com")
+    await user.type(screen.getByLabelText(/^password$/i), "correct-password")
+    await user.click(screen.getByRole("button", { name: /sign in/i }))
+
+    expect(await screen.findByText(/server down/i)).toBeInTheDocument()
   })
 })

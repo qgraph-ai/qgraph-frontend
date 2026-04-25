@@ -27,14 +27,30 @@ import { signInSchema, type SignInValues } from "@/features/auth/schemas"
 import { translateFieldError } from "@/features/auth/translate-error"
 import { useLogin } from "@/features/auth/use-login"
 import { useResendActivation } from "@/features/auth/use-resend-activation"
-import { applyDjoserFieldErrors } from "@/lib/api"
+import { applyDjoserFieldErrors, type NormalizedApiError } from "@/lib/api"
+import { sanitizeReturnTo } from "@/lib/navigation/sanitize-return-to"
+
+function isInactiveAccountError(error: NormalizedApiError): boolean {
+  if (error.code === "inactive_user") return true
+  if (!error.details || typeof error.details !== "object") return false
+
+  const details = error.details as Record<string, unknown>
+  const codeCandidates = [
+    details.code,
+    details.error_code,
+    details.detail_code,
+    details.auth_code,
+  ]
+
+  return codeCandidates.some((candidate) => candidate === "inactive_user")
+}
 
 export function SignInForm({
   resetSuccess,
   nextPath,
 }: {
   resetSuccess: boolean
-  nextPath: string | null
+  nextPath: string
 }) {
   const t = useTranslations("auth")
   const tr = (message: string | undefined) =>
@@ -46,6 +62,7 @@ export function SignInForm({
   const router = useRouter()
   const [formError, setFormError] = useState<string | null>(null)
   const [inactiveEmail, setInactiveEmail] = useState<string | null>(null)
+  const safeNextPath = sanitizeReturnTo(nextPath)
 
   const login = useLogin()
   const resend = useResendActivation()
@@ -60,7 +77,7 @@ export function SignInForm({
     setInactiveEmail(null)
     login.mutate(values, {
       onSuccess: () => {
-        router.replace(nextPath ?? "/")
+        router.replace(safeNextPath)
         router.refresh()
       },
       onError: (error) => {
@@ -68,8 +85,13 @@ export function SignInForm({
           "email",
           "password",
         ])
+
         if (error.status === 401) {
-          setInactiveEmail(values.email)
+          if (isInactiveAccountError(error)) {
+            setInactiveEmail(values.email)
+            setFormError(t("signIn.inactiveUser"))
+            return
+          }
           setFormError(t("signIn.invalidCredentials"))
           return
         }
@@ -94,7 +116,7 @@ export function SignInForm({
       title={t("signIn.title")}
       description={t("signIn.description")}
       guestBack={{
-        href: nextPath ?? "/",
+        href: safeNextPath,
         label: t("common.continueAsGuest"),
       }}
       footer={

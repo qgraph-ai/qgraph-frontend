@@ -2,6 +2,8 @@ import { defineConfig, devices } from "@playwright/test"
 
 const PORT = 3000
 const BASE_URL = `http://127.0.0.1:${PORT}`
+const E2E_API_PORT = 18000
+const E2E_API_URL = `http://127.0.0.1:${E2E_API_PORT}`
 const IS_CI = !!process.env.CI
 
 export default defineConfig({
@@ -30,12 +32,30 @@ export default defineConfig({
     },
   ],
 
-  webServer: {
-    command: "npm run dev",
-    url: BASE_URL,
-    reuseExistingServer: !IS_CI,
-    timeout: 120_000,
-    stdout: "pipe",
-    stderr: "pipe",
-  },
+  webServer: [
+    {
+      command: "node tests/e2e/mock-backend.mjs",
+      url: `${E2E_API_URL}/healthz`,
+      reuseExistingServer: !IS_CI,
+      timeout: 120_000,
+      stdout: "pipe",
+      stderr: "pipe",
+      env: {
+        ...process.env,
+        E2E_API_PORT: String(E2E_API_PORT),
+      },
+    },
+    {
+      command: "npm run dev",
+      url: BASE_URL,
+      reuseExistingServer: !IS_CI,
+      timeout: 120_000,
+      stdout: "pipe",
+      stderr: "pipe",
+      env: {
+        ...process.env,
+        NEXT_PUBLIC_API_URL: E2E_API_URL,
+      },
+    },
+  ],
 })

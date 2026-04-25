@@ -18,6 +18,7 @@ describe("AyahStream", () => {
 
     // An-Nās has 6 ayahs in FAKE_SURAHS
     expect(screen.getAllByRole("listitem")).toHaveLength(6)
+    expect(screen.getByText(/Ayah 1 of surah 114/i)).toBeInTheDocument()
   })
 
   it("aggregates ayahs across paginated responses transparently", async () => {

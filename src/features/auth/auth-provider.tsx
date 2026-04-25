@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useRef } from "react"
 
 import type { NormalizedApiError } from "@/lib/api"
+import { logger } from "@/lib/observability/logger"
 import type { CurrentUser } from "@/services/auth"
 
 import { useCurrentUser } from "./use-current-user"
@@ -30,9 +31,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const prevStatus = useRef<AuthStatus | null>(null)
   useEffect(() => {
     if (prevStatus.current !== status) {
-      console.info(
-        `[auth-debug] AuthProvider: status ${prevStatus.current ?? "initial"} → ${status} | user.id=${query.data?.id ?? "none"} error.status=${(query.error as NormalizedApiError | null)?.status ?? "none"}`
-      )
+      logger.info("Auth status changed", {
+        previous: prevStatus.current ?? "initial",
+        current: status,
+      })
       prevStatus.current = status
     }
   }, [status, query.data, query.error])
@@ -41,10 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user: query.data ?? null,
     status,
     error: (query.error as NormalizedApiError | null) ?? null,
-    refetch: () => {
-      console.info("[auth-debug] AuthProvider.refetch: triggering auth.me refetch")
-      query.refetch()
-    },
+    refetch: () => query.refetch(),
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

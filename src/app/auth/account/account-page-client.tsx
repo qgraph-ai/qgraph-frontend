@@ -1,32 +1,25 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
-import { useEffect } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { AuthCard } from "@/features/auth/components/auth-card"
 import { useAuth } from "@/features/auth/use-auth"
+import type { CurrentUser } from "@/services/auth"
 
 import { ChangeEmailCard } from "./change-email-card"
 import { ChangePasswordCard } from "./change-password-card"
 import { DeleteAccountCard } from "./delete-account-card"
 import { ProfileCard } from "./profile-card"
 
-export function AccountPageClient() {
+export function AccountPageClient({ initialUser }: { initialUser: CurrentUser }) {
   const t = useTranslations("auth")
-  const router = useRouter()
   const { status, user } = useAuth()
+  const effectiveUser = user ?? initialUser
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.replace("/auth/sign-in?next=/auth/account")
-    }
-  }, [router, status])
-
-  if (status === "loading") {
+  if (status === "loading" && !user) {
     return (
       <AuthCard title={t("account.title")}>
         <Skeleton className="h-10 w-full" />
@@ -35,7 +28,7 @@ export function AccountPageClient() {
     )
   }
 
-  if (status !== "authenticated" || !user) {
+  if (!effectiveUser) {
     return (
       <AuthCard
         title={t("account.title")}
@@ -57,10 +50,10 @@ export function AccountPageClient() {
           {t("account.title")}
         </h1>
         <span className="text-xs text-muted-foreground">
-          {t("account.signedInAs", { email: user.email })}
+          {t("account.signedInAs", { email: effectiveUser.email })}
         </span>
       </div>
-      <ProfileCard user={user} />
+      <ProfileCard user={effectiveUser} />
       <ChangePasswordCard />
       <ChangeEmailCard />
       <DeleteAccountCard />

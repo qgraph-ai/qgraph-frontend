@@ -1,3 +1,5 @@
+import { sanitizeReturnTo } from "@/lib/navigation/sanitize-return-to"
+
 import { CallbackCard } from "./callback-card"
 
 type SearchParams = Promise<{ error?: string; next?: string }>
@@ -8,5 +10,6 @@ export default async function CallbackPage({
   searchParams: SearchParams
 }) {
   const { error, next } = await searchParams
-  return <CallbackCard errorCode={error ?? null} nextPath={next ?? null} />
+  const safeNext = sanitizeReturnTo(next)
+  return <CallbackCard errorCode={error ?? null} nextPath={safeNext} />
 }

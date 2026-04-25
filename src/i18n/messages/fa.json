@@ -45,9 +45,19 @@
     "copyright": "© QGraph"
   },
   "search": {
-    "placeholderTitle": "صفحه‌ی جست‌وجو به‌زودی.",
+    "metaTitle": "جست‌وجوی پیشرفته",
+    "metaDescription": "جست‌وجوی واژگانی و معنایی قرآن. این بخش در حال توسعه است.",
+    "placeholderTitle": "جست‌وجوی پیشرفته به‌زودی.",
+    "placeholderDescription": "در حال ساخت جست‌وجوی کلاسیک و معنایی با رتبه‌بندی قابل توضیح و فیلترهای غنی‌تر هستیم.",
     "placeholderQueryLabel": "عبارت جست‌وجو",
     "placeholderEmpty": "عبارتی وارد نشده است.",
+    "backToLanding": "→ بازگشت به صفحه‌ی اصلی"
+  },
+  "segmentation": {
+    "metaTitle": "بخش‌بندی",
+    "metaDescription": "نمای کلی بخش‌بندی موضوعی سوره‌ها. این بخش در حال توسعه است.",
+    "placeholderTitle": "بخش‌بندی به‌زودی.",
+    "placeholderDescription": "در حال آماده‌سازی نمای بصری گروه‌های آیات هستیم تا ساختار هر سوره و مضامین مشترک را سریع‌تر ببینید.",
     "backToLanding": "→ بازگشت به صفحه‌ی اصلی"
   },
   "auth": {
@@ -191,6 +201,7 @@
       "kicker": "قرآن کریم",
       "title": "یکصد و چهارده سوره.",
       "subtitle": "متن عربی اصیل را سوره به سوره بخوانید.",
+      "metaDescription": "متن عربی قرآن کریم را با پیمایش تمیز و سریع سوره‌ها بخوانید.",
       "count": "{count} سوره"
     },
     "reader": {
@@ -202,7 +213,14 @@
       "nextSurah": "بعدی",
       "pagerLabel": "پیمایش سوره‌ها",
       "ayahStreamLabel": "آیات",
+      "bismillahLabel": "بسم‌الله",
+      "ayahScreenReaderLabel": "آیه‌ی {ayah} از سوره‌ی {surah}",
       "backToIndex": "→ فهرست سوره‌ها"
+    },
+    "readerMetadata": {
+      "title": "سوره‌ی {transliteration}",
+      "descriptionWithEnglishName": "متن عربی سوره‌ی {transliteration} ({englishName}) را بخوانید.",
+      "description": "متن عربی سوره‌ی {transliteration} را بخوانید."
     },
     "notFound": {
       "title": "سوره یافت نشد.",

@@ -5,15 +5,36 @@ import { getLocale, getMessages } from "next-intl/server"
 import { AppProviders } from "@/components/providers/app-providers"
 import { directionFor, type Locale } from "@/i18n/locales"
 import { fontVariables } from "@/lib/fonts"
+import { SITE_URL } from "@/lib/env"
 
 import "./globals.css"
 
+const metadataBase = new URL(SITE_URL)
+
 export const metadata: Metadata = {
+  metadataBase,
   title: {
     default: "QGraph",
     template: "%s · QGraph",
   },
-  description: "QGraph — Quran-aware search and exploration.",
+  description: "QGraph helps you read, search, and explore the Qur'an with clarity.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "QGraph",
+    title: "QGraph",
+    description:
+      "QGraph helps you read, search, and explore the Qur'an with clarity.",
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "QGraph",
+    description:
+      "QGraph helps you read, search, and explore the Qur'an with clarity.",
+  },
 }
 
 export default async function RootLayout({

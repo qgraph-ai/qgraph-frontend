@@ -45,9 +45,19 @@
     "copyright": "© QGraph"
   },
   "search": {
-    "placeholderTitle": "Search UI coming soon.",
+    "metaTitle": "Advanced Search",
+    "metaDescription": "Explore Qur'an verses with lexical and semantic search. This section is currently under active development.",
+    "placeholderTitle": "Advanced search is coming soon.",
+    "placeholderDescription": "We're building classic and semantic search with explainable ranking and richer filtering.",
     "placeholderQueryLabel": "You searched for",
     "placeholderEmpty": "No query provided.",
+    "backToLanding": "← Back to landing"
+  },
+  "segmentation": {
+    "metaTitle": "Segmentation",
+    "metaDescription": "View surah-level thematic segmentation. This section is currently under active development.",
+    "placeholderTitle": "Segmentation is coming soon.",
+    "placeholderDescription": "We're preparing visual ayah-group maps to help you see each surah's structure and shared themes at a glance.",
     "backToLanding": "← Back to landing"
   },
   "auth": {
@@ -191,6 +201,7 @@
       "kicker": "The Qur'ān",
       "title": "One hundred and fourteen surahs.",
       "subtitle": "Read the canonical Arabic text, surah by surah.",
+      "metaDescription": "Read the canonical Arabic Qur'an with clean surah navigation.",
       "count": "{count} surahs"
     },
     "reader": {
@@ -202,7 +213,14 @@
       "nextSurah": "Next",
       "pagerLabel": "Surah navigation",
       "ayahStreamLabel": "Ayahs",
+      "bismillahLabel": "Bismillah",
+      "ayahScreenReaderLabel": "Ayah {ayah} of surah {surah}",
       "backToIndex": "← All surahs"
+    },
+    "readerMetadata": {
+      "title": "Surah {transliteration}",
+      "descriptionWithEnglishName": "Read surah {transliteration} ({englishName}) in Arabic.",
+      "description": "Read surah {transliteration} in Arabic."
     },
     "notFound": {
       "title": "Surah not found.",

@@ -8,7 +8,19 @@ test.describe("landing page", () => {
       page.getByRole("heading", { level: 1, name: /toolkit for studying/i })
     ).toBeVisible()
 
-    const quranLink = page.getByRole("link", { name: /qur'an/i }).first()
-    await expect(quranLink).toHaveAttribute("href", "/quran")
+    await page.getByRole("link", { name: /qur'an/i }).first().click()
+    await expect(page).toHaveURL(/\/quran$/)
+  })
+})
+
+test.describe("quran reader", () => {
+  test("navigates from surah index to reader page", async ({ page }) => {
+    await page.goto("/quran")
+
+    await page.getByRole("link", { name: /al-fātiḥah/i }).click()
+    await expect(page).toHaveURL(/\/quran\/1$/)
+    await expect(
+      page.getByRole("heading", { level: 1, name: "ٱلْفَاتِحَة" })
+    ).toBeVisible()
   })
 })

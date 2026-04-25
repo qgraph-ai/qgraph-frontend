@@ -1,6 +1,6 @@
 # Architecture
 
-A quick tour of the Next.js frontend. For conventions and rules, see `CLAUDE.md` and `.ai/bootstrap/frontend_best_practices.md` — they're authoritative.
+A quick tour of the Next.js frontend. For conventions and rules, see `CLAUDE.md` and `.ai/best_practices/01_frontend_best_practices.md` — they're authoritative.
 
 ## Top-level layout
 
@@ -39,7 +39,8 @@ All routes under `src/app/`. Pages are **server components by default**; `"use c
 | `src/app/page.tsx` | Landing page |
 | `src/app/auth/` | Auth flows (sign-in, sign-up, activate, …) |
 | `src/app/quran/` | Surah index + `[surah]/` reader |
-| `src/app/search/` | Search placeholder |
+| `src/app/search/` | Search coming-soon route |
+| `src/app/segmentation/` | Segmentation coming-soon route |
 
 `loading.tsx`, `error.tsx`, and `not-found.tsx` live next to their `page.tsx` per Next's conventions.
 
@@ -92,6 +93,7 @@ Django backend (127.0.0.1:8000)
 ## Where non-obvious decisions live
 
 - **`CLAUDE.md` (root)** — hard rules for the codebase (framework version, RTL, dark mode, backend integration, accessibility).
-- **`.ai/bootstrap/frontend_best_practices.md`** — longer-form conventions with rationale.
+- **`.ai/best_practices/01_frontend_best_practices.md`** — longer-form conventions with rationale.
+- **`.ai/best_practices/02_frontend_security_and_auth_additions.md`** — additional security/auth practices.
 - **`.ai/bootstrap/about_django_backend.md`** — backend shape, auth flow, async job pattern.
 - **`.ai/bootstrap/django_docs/QGraph API.yaml`** — OpenAPI spec; canonical source for request/response shapes.
