@@ -14,7 +14,7 @@ export async function SiteHeader() {
     <header className="w-full border-b border-border/60">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
         <Link href="/" className="inline-flex items-center gap-2">
-          <BrandOrnament className="size-4 text-muted-foreground" />
+          <BrandOrnament className="size-4 text-primary/85" />
           <BrandWordmark />
           <VisuallyHidden.Root>{t("brand")}</VisuallyHidden.Root>
         </Link>

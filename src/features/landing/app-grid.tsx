@@ -17,9 +17,9 @@ export async function AppGrid() {
                 href={href}
                 className="group block rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <Card className="h-full transition-[box-shadow,transform] group-hover:ring-foreground/25 group-active:translate-y-px">
+                <Card className="h-full transition-[box-shadow,transform] group-hover:ring-primary/30 group-active:translate-y-px">
                   <CardHeader className="flex flex-row items-center gap-3 space-y-0">
-                    <Icon className="size-5 text-muted-foreground" aria-hidden />
+                    <Icon className="size-5 text-primary/80" aria-hidden />
                     <CardTitle>{t(titleKey)}</CardTitle>
                   </CardHeader>
                   <CardContent>

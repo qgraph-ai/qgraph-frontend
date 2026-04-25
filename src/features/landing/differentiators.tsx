@@ -50,7 +50,7 @@ export async function Differentiators() {
           {ITEMS.map(({ key, Icon, titleKey, bodyKey }) => (
             <li key={key} className="flex flex-col gap-3 pt-6">
               <Separator className="mb-3 opacity-60" />
-              <Icon className="size-5 text-muted-foreground" aria-hidden />
+              <Icon className="size-5 text-primary/80" aria-hidden />
               <h3 className="text-base font-medium tracking-tight">{t(titleKey)}</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">{t(bodyKey)}</p>
             </li>
