@@ -12,22 +12,32 @@ vi.mock("@/components/site-footer", () => ({
   SiteFooter: () => <div data-testid="site-footer" />,
 }))
 
+vi.mock("@/features/segmentation/components/segmentation-workbench", () => ({
+  SegmentationWorkbench: () => <div data-testid="segmentation-workbench" />,
+}))
+
+vi.mock("@/services/segmentation", () => ({
+  getFeaturedPublicWorkspace: async () => null,
+  listPublicWorkspaces: async () => [],
+}))
+
+vi.mock("@/services/quran", () => ({
+  listSurahs: async () => ({ count: 0, next: null, previous: null, results: [] }),
+}))
+
 describe("Segmentation page", () => {
   it("generates localized metadata", async () => {
     const metadata = await generateMetadata()
-    expect(metadata.title).toBe("Segmentation")
+    expect(metadata.title).toBe("Segmentation Atlas")
     expect(metadata.alternates?.canonical).toBe("/segmentation")
   })
 
-  it("renders coherent coming-soon content", async () => {
+  it("renders segmentation shell route", async () => {
     const element = await SegmentationPage()
     renderWithProviders(element)
 
-    expect(
-      screen.getByRole("heading", { name: /segmentation is coming soon/i })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole("link", { name: /back to landing/i })
-    ).toHaveAttribute("href", "/")
+    expect(screen.getByTestId("site-header")).toBeInTheDocument()
+    expect(screen.getByTestId("segmentation-workbench")).toBeInTheDocument()
+    expect(screen.getByTestId("site-footer")).toBeInTheDocument()
   })
 })
