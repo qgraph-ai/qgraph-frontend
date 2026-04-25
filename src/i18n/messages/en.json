@@ -55,10 +55,51 @@
   },
   "segmentation": {
     "metaTitle": "Segmentation",
-    "metaDescription": "View surah-level thematic segmentation. This section is currently under active development.",
-    "placeholderTitle": "Segmentation is coming soon.",
-    "placeholderDescription": "We're preparing visual ayah-group maps to help you see each surah's structure and shared themes at a glance.",
-    "backToLanding": "← Back to landing"
+    "metaDescription": "Surah-level thematic segmentation: see each surah grouped into meaningful ayah blocks at a glance.",
+    "index": {
+      "kicker": "Segmentation",
+      "title": "Read each surah as a map of meaning.",
+      "subtitle": "Pick a surah to see its ayahs grouped into thematic segments.",
+      "metaDescription": "Browse surah-level segmentation: each surah grouped into thematic blocks of consecutive ayahs.",
+      "count": "{count} surahs"
+    },
+    "reader": {
+      "kickerTemplate": "Segmentation · Surah {number}",
+      "versionPickerLabel": "Segmentation version",
+      "versionPickerPlaceholder": "Select a version",
+      "ayahStreamLabel": "Segmented ayahs",
+      "tagsLabel": "Tags",
+      "bismillahLabel": "Bismillah",
+      "ayahScreenReaderLabel": "Ayah {ayah} of surah {surah}",
+      "backToIndex": "← All surahs",
+      "gapBlockLabel": "Ayahs not part of any segment",
+      "meccan": "Meccan",
+      "medinan": "Medinan",
+      "ayahCount": "{count} āyāt",
+      "prevSurah": "Previous",
+      "nextSurah": "Next",
+      "pagerLabel": "Surah navigation"
+    },
+    "readerMetadata": {
+      "title": "Segmentation · Surah {number} · {name}",
+      "description": "Thematic segmentation of Surah {number} ({name}): consecutive ayahs grouped by shared meaning."
+    },
+    "empty": {
+      "title": "No segmentation yet.",
+      "body": "There's no public segmentation available for this surah right now.",
+      "backToIndex": "← All surahs"
+    },
+    "error": {
+      "title": "Couldn't load this segmentation.",
+      "body": "Something went wrong reaching the segmentation service. Try again.",
+      "retry": "Try again",
+      "backToIndex": "Back to the index"
+    },
+    "notFound": {
+      "title": "Surah not found.",
+      "body": "The surah number you requested isn't valid.",
+      "backToIndex": "Back to the index"
+    }
   },
   "auth": {
     "common": {

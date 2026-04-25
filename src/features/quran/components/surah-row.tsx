@@ -6,13 +6,15 @@ import type { Surah } from "@/services/quran"
 export function SurahRow({
   surah,
   revelationLabel,
+  basePath = "/quran",
 }: {
   surah: Surah
   revelationLabel?: string
+  basePath?: string
 }) {
   return (
     <Link
-      href={`/quran/${surah.number}`}
+      href={`${basePath}/${surah.number}`}
       className="group grid grid-cols-[auto_1fr_auto] items-center gap-5 rounded-lg px-2 py-5 outline-none transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring md:gap-6 md:px-3"
     >
       <span

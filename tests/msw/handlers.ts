@@ -4,6 +4,13 @@ import { API_URL } from "@/lib/env"
 import { AUTH_PATHS } from "@/services/auth/paths"
 import { QURAN_PATHS } from "@/services/quran/paths"
 import type { Ayah, Surah } from "@/services/quran/types"
+import { SEGMENTATION_PATHS } from "@/services/segmentation/paths"
+import type {
+  SegmentWithTags,
+  SegmentationVersion,
+  Tag,
+  Workspace,
+} from "@/services/segmentation/types"
 
 const url = (path: string) => `${API_URL}${path}`
 
@@ -102,8 +109,126 @@ export const quranHandlers = [
   }),
 ]
 
+export const FAKE_FEATURED_WORKSPACE: Workspace = {
+  id: 1,
+  slug: "public",
+  title: "PUBLIC",
+  description: "Public workspace",
+  visibility: "public",
+  is_featured: true,
+  created_at: "2026-03-04T06:09:24.424844Z",
+  updated_at: "2026-03-04T06:09:24.424848Z",
+}
+
+export const FAKE_VERSION_PUBLIC_ID = "53b1efe8-e4c4-4a93-b9f7-0b5cc34e595a"
+
+export const FAKE_VERSIONS: SegmentationVersion[] = [
+  {
+    id: 485,
+    public_id: FAKE_VERSION_PUBLIC_ID,
+    workspace: 1,
+    surah: 2,
+    title: "AUTO Public Segmentation Surah 002",
+    status: "active",
+    origin: "ai",
+    base_version: null,
+    created_at: "2026-04-23T22:02:42.133465Z",
+    updated_at: "2026-04-23T22:02:42.135401Z",
+  },
+]
+
+const FAKE_TAGS: Tag[] = [
+  {
+    id: 1,
+    public_id: "11111111-1111-1111-1111-111111111111",
+    workspace: 1,
+    name: "creation",
+    color: "#22c55e",
+    description: "",
+    origin: "ai",
+  },
+  {
+    id: 2,
+    public_id: "22222222-2222-2222-2222-222222222222",
+    workspace: 1,
+    name: "judgment",
+    color: "#a855f7",
+    description: "",
+    origin: "ai",
+  },
+]
+
+export const FAKE_SEGMENTS: SegmentWithTags[] = [
+  {
+    id: 1,
+    public_id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    start_ayah: 1,
+    end_ayah: 3,
+    title: "Opening",
+    summary: "",
+    origin: "ai",
+    tags: [FAKE_TAGS[0]],
+  },
+  {
+    id: 2,
+    public_id: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+    start_ayah: 4,
+    end_ayah: 7,
+    title: "Reckoning",
+    summary: "",
+    origin: "ai",
+    tags: [FAKE_TAGS[1]],
+  },
+]
+
+export const segmentationHandlers = [
+  http.get(url(SEGMENTATION_PATHS.featuredWorkspace), () =>
+    HttpResponse.json(FAKE_FEATURED_WORKSPACE)
+  ),
+
+  http.get(
+    `${API_URL}/api/v1/segmentation/public/workspaces/:slug/segmentation-versions/`,
+    ({ request }) => {
+      const params = new URL(request.url).searchParams
+      const surah = params.get("surah")
+      const filtered = surah
+        ? FAKE_VERSIONS.filter((v) => v.surah === Number(surah))
+        : FAKE_VERSIONS
+      return HttpResponse.json({
+        count: filtered.length,
+        next: null,
+        previous: null,
+        results: filtered,
+      })
+    }
+  ),
+
+  http.get(
+    `${API_URL}/api/v1/segmentation/public/segmentation-versions/:publicId/segments/`,
+    () =>
+      HttpResponse.json({
+        count: FAKE_SEGMENTS.length,
+        next: null,
+        previous: null,
+        results: FAKE_SEGMENTS,
+      })
+  ),
+
+  http.get(
+    `${API_URL}/api/v1/segmentation/public/segmentation-versions/:publicId/tags/`,
+    () =>
+      HttpResponse.json({
+        count: FAKE_TAGS.length,
+        next: null,
+        previous: null,
+        results: FAKE_TAGS,
+      })
+  ),
+]
+
 export const handlers = [
   ...quranHandlers,
+  ...segmentationHandlers,
   http.get(url(AUTH_PATHS.csrf), () =>
     HttpResponse.json(
       { csrfToken: "test-csrf-token" },

@@ -31,6 +31,14 @@ describe("SurahRow", () => {
     expect(link).toHaveAttribute("href", "/quran/2")
   })
 
+  it("respects an override basePath", () => {
+    renderWithProviders(
+      <SurahRow surah={make()} basePath="/segmentation" revelationLabel="Medinan" />
+    )
+    const link = screen.getByRole("link")
+    expect(link).toHaveAttribute("href", "/segmentation/2")
+  })
+
   it("zero-pads the surah number to three digits", () => {
     renderWithProviders(
       <SurahRow surah={make({ number: 1 })} revelationLabel="Meccan" />

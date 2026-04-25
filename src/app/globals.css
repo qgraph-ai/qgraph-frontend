@@ -131,3 +131,13 @@
     font-family: var(--font-sans-fa), var(--font-sans);
   }
 }
+
+[data-segment-card][data-tinted] {
+  background-color: var(--seg-tint-light);
+  border-color: var(--seg-border-light);
+}
+
+.dark [data-segment-card][data-tinted] {
+  background-color: var(--seg-tint-dark);
+  border-color: var(--seg-border-dark);
+}

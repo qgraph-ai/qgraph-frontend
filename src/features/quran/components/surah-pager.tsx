@@ -15,8 +15,18 @@ function neighbor(all: Surah[], number: number): PagerNeighbor {
   return { number: found.number, transliteration: found.transliteration }
 }
 
-export async function SurahPager({ current }: { current: number }) {
-  const t = await getTranslations("quran.reader")
+type ReaderNamespace = "quran.reader" | "segmentation.reader"
+
+export async function SurahPager({
+  current,
+  basePath = "/quran",
+  i18nNamespace = "quran.reader",
+}: {
+  current: number
+  basePath?: string
+  i18nNamespace?: ReaderNamespace
+}) {
+  const t = await getTranslations(i18nNamespace)
   const { results } = await listSurahs({
     page_size: SURAH_COUNT,
     ordering: "number",
@@ -32,7 +42,7 @@ export async function SurahPager({ current }: { current: number }) {
     >
       {prev ? (
         <Link
-          href={`/quran/${prev.number}`}
+          href={`${basePath}/${prev.number}`}
           className="group flex flex-1 items-center gap-3 rounded-md px-2 py-3 outline-none transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring"
         >
           <ArrowLeft
@@ -56,7 +66,7 @@ export async function SurahPager({ current }: { current: number }) {
 
       {next ? (
         <Link
-          href={`/quran/${next.number}`}
+          href={`${basePath}/${next.number}`}
           className="group flex flex-1 items-center justify-end gap-3 rounded-md px-2 py-3 text-end outline-none transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring"
         >
           <span className="flex min-w-0 flex-col items-end gap-1">

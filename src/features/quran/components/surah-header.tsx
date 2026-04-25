@@ -5,8 +5,16 @@ import { Separator } from "@/components/ui/separator"
 import { padSurahNumber } from "@/features/quran/lib/format"
 import type { Surah } from "@/services/quran"
 
-export async function SurahHeader({ surah }: { surah: Surah }) {
-  const t = await getTranslations("quran.reader")
+type ReaderNamespace = "quran.reader" | "segmentation.reader"
+
+export async function SurahHeader({
+  surah,
+  i18nNamespace = "quran.reader",
+}: {
+  surah: Surah
+  i18nNamespace?: ReaderNamespace
+}) {
+  const t = await getTranslations(i18nNamespace)
   const headingId = `surah-${surah.number}-name`
 
   const metaParts: string[] = []

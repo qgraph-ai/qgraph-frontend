@@ -4,7 +4,11 @@ import { SurahRow } from "@/features/quran/components/surah-row"
 import { SURAH_COUNT } from "@/features/quran/lib/constants"
 import { listSurahs } from "@/services/quran"
 
-export async function SurahIndex() {
+export async function SurahIndex({
+  basePath = "/quran",
+}: {
+  basePath?: string
+} = {}) {
   const t = await getTranslations("quran.reader")
   const data = await listSurahs({ page_size: SURAH_COUNT, ordering: "number" })
 
@@ -14,6 +18,7 @@ export async function SurahIndex() {
         <li key={surah.number}>
           <SurahRow
             surah={surah}
+            basePath={basePath}
             revelationLabel={
               surah.revelation_place ? t(surah.revelation_place) : undefined
             }
