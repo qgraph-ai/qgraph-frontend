@@ -15,12 +15,9 @@ import { cn } from "@/lib/utils"
 import type { Ayah } from "@/services/quran"
 import type { SegmentWithTags } from "@/services/segmentation"
 
-import { SegmentTagChip } from "./segment-tag-chip"
+import { pickSegmentColor } from "../lib/pick-segment-color"
 
-function pickSegmentColor(segment: SegmentWithTags): string | null {
-  const tag = segment.tags.find((t) => t.color)
-  return tag?.color ?? null
-}
+import { SegmentTagChip } from "./segment-tag-chip"
 
 function hasContent(value: string | null | undefined): boolean {
   return typeof value === "string" && value.trim().length > 0
@@ -62,11 +59,12 @@ export function SegmentCard({
   return (
     <Collapsible open={open} onOpenChange={setOpen} asChild>
       <article
+        id={`segment-${segment.public_id}`}
         data-segment-card
         data-segment-public-id={segment.public_id}
         data-tinted={tinted ? "" : undefined}
         style={style}
-        className="rounded-2xl border border-border/60 bg-card/40 px-4 py-3 transition-colors md:px-6 md:py-4"
+        className="scroll-mt-20 rounded-2xl border border-border/60 bg-card/40 px-4 py-3 transition-colors md:px-6 md:py-4"
       >
         {(segment.tags.length > 0 || hasTheme) && (
           <div className="mb-2 flex items-center gap-1.5">
@@ -142,7 +140,7 @@ export function SegmentCard({
               <p
                 dir="rtl"
                 lang="ar"
-                className="font-[family-name:var(--font-arabic)] text-2xl leading-[2.15] md:text-[2.1rem] md:leading-[2.1]"
+                className="font-(family-name:--font-arabic) text-2xl leading-[2.15] md:text-[2.1rem] md:leading-[2.1]"
               >
                 {ayah.text_ar}
                 <span

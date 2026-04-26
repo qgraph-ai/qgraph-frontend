@@ -81,6 +81,12 @@
       "nextSurah": "بعدی",
       "pagerLabel": "پیمایش سوره"
     },
+    "spine": {
+      "label": "ستون موضوعی",
+      "jumpTo": "رفتن به {title}",
+      "untitled": "بخش {number}",
+      "gapLabel": "آیات بدون بخش‌بندی {start}–{end}"
+    },
     "readerMetadata": {
       "title": "بخش‌بندی · سوره {number} · {name}",
       "description": "بخش‌بندی موضوعی سوره‌ی {number} ({name}): گروه‌بندی آیات پیاپی بر اساس معنای مشترک."

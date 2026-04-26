@@ -12,8 +12,9 @@ export function UncoveredBlock({
 }) {
   return (
     <section
+      id={ayahs[0] ? `gap-${ayahs[0].number_global}` : undefined}
       aria-label={label}
-      className="rounded-2xl border border-dashed border-border/50 px-4 py-3 md:px-6 md:py-4"
+      className="scroll-mt-20 rounded-2xl border border-dashed border-border/50 px-4 py-3 md:px-6 md:py-4"
     >
       <p className="mb-2 text-[0.65rem] uppercase tracking-[0.22em] text-muted-foreground">
         {label}

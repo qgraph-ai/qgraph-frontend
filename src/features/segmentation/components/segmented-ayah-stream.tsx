@@ -4,8 +4,10 @@ import { getAllSurahAyahs } from "@/services/quran"
 import { getAllSegments } from "@/services/segmentation"
 
 import { groupSegments } from "../lib/group-segments"
+import { buildSpineItems } from "../lib/spine-items"
 
 import { SegmentCard } from "./segment-card"
+import { ThemeSpine } from "./theme-spine"
 import { UncoveredBlock } from "./uncovered-block"
 
 export async function SegmentedAyahStream({
@@ -22,6 +24,7 @@ export async function SegmentedAyahStream({
   ])
 
   const blocks = groupSegments(ayahs, segments)
+  const { items: spineItems } = buildSpineItems(blocks)
 
   const ayahLabel = (ayah: { number_in_surah: number; surah_number: number }) =>
     t("ayahScreenReaderLabel", {
@@ -30,29 +33,32 @@ export async function SegmentedAyahStream({
     })
 
   return (
-    <section
-      aria-label={t("ayahStreamLabel")}
-      className="mx-auto flex max-w-2xl flex-col gap-5"
-    >
-      {blocks.map((block, i) => {
-        if (block.kind === "segment") {
+    <>
+      <ThemeSpine items={spineItems} />
+      <section
+        aria-label={t("ayahStreamLabel")}
+        className="mx-auto flex max-w-2xl flex-col gap-5"
+      >
+        {blocks.map((block, i) => {
+          if (block.kind === "segment") {
+            return (
+              <SegmentCard
+                key={`seg-${block.segment.public_id}`}
+                segment={block.segment}
+                ayahs={block.ayahs}
+              />
+            )
+          }
           return (
-            <SegmentCard
-              key={`seg-${block.segment.public_id}`}
-              segment={block.segment}
+            <UncoveredBlock
+              key={`gap-${i}-${block.ayahs[0]?.number_in_surah ?? "x"}`}
               ayahs={block.ayahs}
+              label={t("gapBlockLabel")}
+              ayahLabel={ayahLabel}
             />
           )
-        }
-        return (
-          <UncoveredBlock
-            key={`gap-${i}-${block.ayahs[0]?.number_in_surah ?? "x"}`}
-            ayahs={block.ayahs}
-            label={t("gapBlockLabel")}
-            ayahLabel={ayahLabel}
-          />
-        )
-      })}
-    </section>
+        })}
+      </section>
+    </>
   )
 }

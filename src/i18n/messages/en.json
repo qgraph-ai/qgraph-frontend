@@ -81,6 +81,12 @@
       "nextSurah": "Next",
       "pagerLabel": "Surah navigation"
     },
+    "spine": {
+      "label": "Theme spine",
+      "jumpTo": "Jump to {title}",
+      "untitled": "Segment {number}",
+      "gapLabel": "Uncovered ayahs {start}–{end}"
+    },
     "readerMetadata": {
       "title": "Segmentation · Surah {number} · {name}",
       "description": "Thematic segmentation of Surah {number} ({name}): consecutive ayahs grouped by shared meaning."
