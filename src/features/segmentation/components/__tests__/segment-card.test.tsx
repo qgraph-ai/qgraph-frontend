@@ -1,3 +1,4 @@
+import { fireEvent } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 
 import type { Ayah } from "@/services/quran"
@@ -49,7 +50,6 @@ describe("SegmentCard", () => {
       <SegmentCard
         segment={segment({ tags: [tag()] })}
         ayahs={[ayah(1), ayah(2)]}
-        ayahLabel={(a) => `ayah ${a.number_in_surah}`}
       />
     )
     expect(screen.getByText("آية 1", { exact: false })).toBeInTheDocument()
@@ -61,7 +61,6 @@ describe("SegmentCard", () => {
       <SegmentCard
         segment={segment({ tags: [tag({ color: "#a855f7" })] })}
         ayahs={[ayah(1)]}
-        ayahLabel={() => "ayah"}
       />
     )
     const card = document.querySelector("[data-segment-card]") as HTMLElement
@@ -78,7 +77,6 @@ describe("SegmentCard", () => {
       <SegmentCard
         segment={segment({ tags: [] })}
         ayahs={[ayah(1)]}
-        ayahLabel={() => "ayah"}
       />
     )
     const card = document.querySelector("[data-segment-card]") as HTMLElement
@@ -96,7 +94,6 @@ describe("SegmentCard", () => {
           ],
         })}
         ayahs={[ayah(1)]}
-        ayahLabel={() => "ayah"}
       />
     )
     expect(screen.getByText("creation")).toBeInTheDocument()
@@ -108,10 +105,91 @@ describe("SegmentCard", () => {
       <SegmentCard
         segment={segment({ tags: [] })}
         ayahs={[ayah(1)]}
-        ayahLabel={() => "ayah"}
       />
     )
     const card = document.querySelector("[data-segment-card]") as HTMLElement
     expect(card.querySelector("ul")).toBeNull()
+  })
+
+  describe("theme disclosure", () => {
+    it("renders the toggle button when the segment has a title or summary", () => {
+      renderWithProviders(
+        <SegmentCard
+          segment={segment({ tags: [tag()], title: "The story of Adam" })}
+          ayahs={[ayah(1)]}
+        />
+      )
+      expect(
+        screen.getByRole("button", { name: /toggle segment theme/i })
+      ).toBeInTheDocument()
+    })
+
+    it("does not render a toggle when both title and summary are empty/whitespace", () => {
+      renderWithProviders(
+        <SegmentCard
+          segment={segment({ tags: [tag()], title: "  ", summary: "" })}
+          ayahs={[ayah(1)]}
+        />
+      )
+      expect(
+        screen.queryByRole("button", { name: /toggle segment theme/i })
+      ).not.toBeInTheDocument()
+    })
+
+    it("hides title and summary by default and reveals them after clicking", () => {
+      renderWithProviders(
+        <SegmentCard
+          segment={segment({
+            tags: [tag()],
+            title: "The story of Adam",
+            summary: "Creation of Adam and the bowing of angels.",
+          })}
+          ayahs={[ayah(1)]}
+        />
+      )
+
+      const toggle = screen.getByRole("button", {
+        name: /toggle segment theme/i,
+      })
+      expect(toggle).toHaveAttribute("aria-expanded", "false")
+
+      // Radix renders the content but hides it; the heading should not be
+      // accessible while collapsed.
+      expect(
+        screen.queryByRole("heading", { name: "The story of Adam" })
+      ).not.toBeInTheDocument()
+
+      fireEvent.click(toggle)
+
+      expect(toggle).toHaveAttribute("aria-expanded", "true")
+      expect(
+        screen.getByRole("heading", { name: "The story of Adam" })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByText("Creation of Adam and the bowing of angels.")
+      ).toBeInTheDocument()
+    })
+
+    it("renders only the present field when one of title/summary is empty", () => {
+      renderWithProviders(
+        <SegmentCard
+          segment={segment({
+            tags: [tag()],
+            title: "",
+            summary: "Standalone summary text.",
+          })}
+          ayahs={[ayah(1)]}
+        />
+      )
+      const toggle = screen.getByRole("button", {
+        name: /toggle segment theme/i,
+      })
+      fireEvent.click(toggle)
+
+      expect(
+        screen.getByText("Standalone summary text.")
+      ).toBeInTheDocument()
+      expect(screen.queryByRole("heading")).not.toBeInTheDocument()
+    })
   })
 })

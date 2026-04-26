@@ -41,7 +41,6 @@ export async function SegmentedAyahStream({
               key={`seg-${block.segment.public_id}`}
               segment={block.segment}
               ayahs={block.ayahs}
-              ayahLabel={ayahLabel}
             />
           )
         }

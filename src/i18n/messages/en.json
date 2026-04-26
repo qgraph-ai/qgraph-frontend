@@ -69,6 +69,7 @@
       "versionPickerPlaceholder": "Select a version",
       "ayahStreamLabel": "Segmented ayahs",
       "tagsLabel": "Tags",
+      "toggleSegmentTheme": "Toggle segment theme",
       "bismillahLabel": "Bismillah",
       "ayahScreenReaderLabel": "Ayah {ayah} of surah {surah}",
       "backToIndex": "← All surahs",
