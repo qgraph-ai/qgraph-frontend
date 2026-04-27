@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
-import { ComingSoonShell } from "@/features/coming-soon/components/coming-soon-shell"
+import { SearchExperience } from "@/features/search/components/search-experience"
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("search")
@@ -24,27 +24,19 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function SearchPlaceholderPage({
+export default async function SearchPage({
   searchParams,
 }: {
   searchParams: Promise<{ q?: string }>
 }) {
   const { q } = await searchParams
-  const t = await getTranslations("search")
   const trimmed = q?.trim() ?? ""
 
   return (
     <>
       <SiteHeader />
       <main className="flex-1">
-        <ComingSoonShell
-          title={t("placeholderTitle")}
-          description={t("placeholderDescription")}
-          queryLabel={t("placeholderQueryLabel")}
-          queryValue={trimmed}
-          emptyQueryLabel={t("placeholderEmpty")}
-          backToLandingLabel={t("backToLanding")}
-        />
+        <SearchExperience initialQuery={trimmed} />
       </main>
       <SiteFooter />
     </>

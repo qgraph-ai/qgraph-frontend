@@ -19,25 +19,29 @@ describe("Search page", () => {
     expect(metadata.alternates?.canonical).toBe("/search")
   })
 
-  it("renders coming-soon content and echoes the query", async () => {
+  it("renders the centered search experience when no query is provided", async () => {
+    const element = await SearchPage({
+      searchParams: Promise.resolve({}),
+    })
+    renderWithProviders(element)
+
+    expect(
+      screen.getByRole("heading", { name: /ask anything about the qur'an/i })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText(/ask a question or enter a concept/i)
+    ).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /^search$/i })).toBeInTheDocument()
+  })
+
+  it("hydrates the search input from the q query parameter", async () => {
     const element = await SearchPage({
       searchParams: Promise.resolve({ q: "mercy" }),
     })
     renderWithProviders(element)
 
     expect(
-      screen.getByRole("heading", { name: /advanced search is coming soon/i })
-    ).toBeInTheDocument()
-    expect(screen.getByText(/you searched for/i)).toBeInTheDocument()
-    expect(screen.getByText("mercy")).toBeInTheDocument()
-  })
-
-  it("renders empty-query helper text when no query exists", async () => {
-    const element = await SearchPage({
-      searchParams: Promise.resolve({}),
-    })
-    renderWithProviders(element)
-
-    expect(screen.getByText(/no query provided/i)).toBeInTheDocument()
+      screen.getByPlaceholderText(/ask a question or enter a concept/i)
+    ).toHaveValue("mercy")
   })
 })

@@ -46,12 +46,42 @@
   },
   "search": {
     "metaTitle": "Advanced Search",
-    "metaDescription": "Explore Qur'an verses with lexical and semantic search. This section is currently under active development.",
-    "placeholderTitle": "Advanced search is coming soon.",
-    "placeholderDescription": "We're building classic and semantic search with explainable ranking and richer filtering.",
-    "placeholderQueryLabel": "You searched for",
-    "placeholderEmpty": "No query provided.",
-    "backToLanding": "← Back to landing"
+    "metaDescription": "Search the Qur'an with lexical and semantic understanding. Get structured answers grouped into typed blocks with confidence scores.",
+    "kicker": "QGraph search",
+    "heading": "Ask anything about the Qur'an.",
+    "subheading": "Get structured, explainable answers grouped into typed blocks.",
+    "placeholder": "Ask a question or enter a concept…",
+    "submit": "Search",
+    "filters": {
+      "label": "Filters",
+      "surahs": "Surahs",
+      "selectAll": "Select all",
+      "clear": "Clear",
+      "loadError": "Couldn't load surahs."
+    },
+    "states": {
+      "loading": "Searching…",
+      "partial": "Some results are missing or still being prepared.",
+      "empty": "The backend returned no result blocks for this query.",
+      "errorTitle": "Couldn't run this search.",
+      "errorBody": "Something went wrong reaching the search service. Try again.",
+      "submitErrorTitle": "Couldn't submit your query.",
+      "executionFailedTitle": "Search failed before producing results.",
+      "retry": "Try again"
+    },
+    "bookmark": {
+      "add": "Bookmark",
+      "remove": "Bookmarked",
+      "added": "Saved to your bookmarks.",
+      "removed": "Removed from bookmarks.",
+      "requiresAuth": "Sign in to save bookmarks."
+    },
+    "feedback": {
+      "helpful": "Helpful",
+      "notHelpful": "Not helpful",
+      "thanks": "Thanks for the feedback.",
+      "requiresAuth": "Sign in to leave feedback."
+    }
   },
   "segmentation": {
     "metaTitle": "Segmentation",
