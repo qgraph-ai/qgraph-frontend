@@ -4,6 +4,12 @@ import { API_URL } from "@/lib/env"
 import { AUTH_PATHS } from "@/services/auth/paths"
 import { QURAN_PATHS } from "@/services/quran/paths"
 import type { Ayah, Surah } from "@/services/quran/types"
+import { SEARCH_PATHS } from "@/services/search/paths"
+import type {
+  SearchExecutionSummary,
+  SearchResponse,
+  SearchSubmissionEnvelope,
+} from "@/services/search/types"
 import { SEGMENTATION_PATHS } from "@/services/segmentation/paths"
 import type {
   SegmentWithTags,
@@ -226,9 +232,128 @@ export const segmentationHandlers = [
   ),
 ]
 
+export const FAKE_SEARCH_EXECUTION_ID = 5435
+
+export const FAKE_SEARCH_RESPONSE: SearchResponse = {
+  id: 4824,
+  execution: FAKE_SEARCH_EXECUTION_ID,
+  title: "Search results from Django",
+  overall_confidence: 0.82,
+  render_schema_version: "v1",
+  metadata: {},
+  blocks: [
+    {
+      id: 11850,
+      block_type: "text",
+      order: 0,
+      title: "Mercy across the Qur'an",
+      payload: {
+        headline: "Server-rendered overview",
+        details: "Paragraph one from Django.\n\nParagraph two from Django.",
+      },
+      explanation: "",
+      confidence: 0.88,
+      provenance: {},
+      warning_text: "",
+      items: [],
+    },
+  ],
+  created_at: "2026-05-03T15:40:10.722688Z",
+  updated_at: "2026-05-03T15:40:10.722696Z",
+}
+
+export const FAKE_SEARCH_ENVELOPE_ASYNC: SearchSubmissionEnvelope = {
+  query_id: 1835,
+  execution_id: FAKE_SEARCH_EXECUTION_ID,
+  execution_status: "queued",
+  mode: "async",
+  guest_token: "guest-test-token",
+  poll_url: `/api/v1/search/executions/${FAKE_SEARCH_EXECUTION_ID}/`,
+  response_url: `/api/v1/search/executions/${FAKE_SEARCH_EXECUTION_ID}/response/`,
+  response: null,
+}
+
+export const FAKE_SEARCH_EXECUTION_SUCCEEDED: SearchExecutionSummary = {
+  id: FAKE_SEARCH_EXECUTION_ID,
+  query_id: 1835,
+  execution_number: 1,
+  status: "succeeded",
+  mode: "async",
+  started_at: "2026-05-03T15:40:09.000Z",
+  completed_at: "2026-05-03T15:40:10.722688Z",
+  latency_ms: 1700,
+  response_available: true,
+  created_at: "2026-05-03T15:40:08.000Z",
+  updated_at: "2026-05-03T15:40:10.722696Z",
+}
+
+export const searchHandlers = [
+  http.post(url(SEARCH_PATHS.submit), () =>
+    HttpResponse.json(FAKE_SEARCH_ENVELOPE_ASYNC, { status: 202 })
+  ),
+
+  http.get(`${API_URL}/api/v1/search/executions/:id/`, () =>
+    HttpResponse.json(FAKE_SEARCH_EXECUTION_SUCCEEDED)
+  ),
+
+  http.get(`${API_URL}/api/v1/search/executions/:id/response/`, () =>
+    HttpResponse.json(FAKE_SEARCH_RESPONSE)
+  ),
+
+  http.get(url(SEARCH_PATHS.bookmarks), () =>
+    HttpResponse.json({ count: 0, next: null, previous: null, results: [] })
+  ),
+
+  http.post(url(SEARCH_PATHS.bookmarks), async ({ request }) => {
+    const body = (await request.json()) as {
+      response_id?: number
+      result_item_id?: number
+      note?: string
+    }
+    const now = new Date().toISOString()
+    return HttpResponse.json(
+      {
+        id: 1,
+        response: body.response_id ?? null,
+        result_item: body.result_item_id ?? null,
+        note: body.note ?? "",
+        created_at: now,
+        updated_at: now,
+      },
+      { status: 201 }
+    )
+  }),
+
+  http.delete(`${API_URL}/api/v1/search/bookmarks/:id/`, () =>
+    new HttpResponse(null, { status: 204 })
+  ),
+
+  http.post(url(SEARCH_PATHS.feedback), async ({ request }) => {
+    const body = (await request.json()) as Record<string, unknown>
+    const now = new Date().toISOString()
+    return HttpResponse.json(
+      {
+        id: 1,
+        feedback_type: body.feedback_type,
+        comment: body.comment ?? "",
+        metadata: body.metadata ?? {},
+        search_query: body.search_query_id ?? null,
+        execution: body.execution_id ?? null,
+        response: body.response_id ?? null,
+        response_block: body.response_block_id ?? null,
+        result_item: body.result_item_id ?? null,
+        created_at: now,
+        updated_at: now,
+      },
+      { status: 201 }
+    )
+  }),
+]
+
 export const handlers = [
   ...quranHandlers,
   ...segmentationHandlers,
+  ...searchHandlers,
   http.get(url(AUTH_PATHS.csrf), () =>
     HttpResponse.json(
       { csrfToken: "test-csrf-token" },

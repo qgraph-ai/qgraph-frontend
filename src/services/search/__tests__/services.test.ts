@@ -1,5 +1,7 @@
-import { describe, expect, it, vi } from "vitest"
+import { http, HttpResponse } from "msw"
+import { afterEach, describe, expect, it } from "vitest"
 
+import { API_URL } from "@/lib/env"
 import { tokenStore } from "@/lib/api"
 import {
   createSearchBookmark,
@@ -11,58 +13,229 @@ import {
   SEARCH_GUEST_TOKEN_KEY,
   submitSearch,
 } from "@/services/search"
+import { SEARCH_PATHS } from "@/services/search/paths"
 
-describe("search service (mock dispatch)", () => {
-  it("submitSearch returns a mock envelope and stores the guest token", async () => {
-    tokenStore.clearGuestToken(SEARCH_GUEST_TOKEN_KEY)
+import { server } from "../../../../tests/msw/server"
+
+const url = (path: string) => `${API_URL}${path}`
+
+afterEach(() => {
+  tokenStore.clearGuestToken(SEARCH_GUEST_TOKEN_KEY)
+})
+
+describe("submitSearch", () => {
+  it("POSTs the canonical body shape and stores the guest token", async () => {
+    let captured: unknown = null
+    server.use(
+      http.post(url(SEARCH_PATHS.submit), async ({ request }) => {
+        captured = await request.json()
+        return HttpResponse.json(
+          {
+            query_id: 1,
+            execution_id: 42,
+            execution_status: "queued",
+            mode: "async",
+            guest_token: "token-from-django",
+            poll_url: "/api/v1/search/executions/42/",
+            response_url: "/api/v1/search/executions/42/response/",
+            response: null,
+          },
+          { status: 202 }
+        )
+      })
+    )
+
     const envelope = await submitSearch({
-      query: "service mocks",
+      query: "mercy",
       filters: { surahs: [1, 2] },
     })
-    expect(envelope.execution_id).toBeGreaterThan(0)
+
+    expect(captured).toEqual({
+      query: "mercy",
+      filters: { surahs: [1, 2] },
+      output_preferences: {},
+    })
+    expect(envelope.execution_id).toBe(42)
     expect(envelope.mode).toBe("async")
-    expect(envelope.poll_url).toContain("/executions/")
     expect(envelope.response).toBeNull()
     expect(tokenStore.getGuestToken(SEARCH_GUEST_TOKEN_KEY)).toBe(
-      envelope.guest_token
+      "token-from-django"
     )
-    tokenStore.clearGuestToken(SEARCH_GUEST_TOKEN_KEY)
   })
 
-  it("getExecution polls the mock and getExecutionResponse returns once succeeded", async () => {
-    vi.useFakeTimers({ now: 0 })
-    try {
-      const envelope = await submitSearch({ query: "polling path" })
+  it("defaults filters to {} when none are provided", async () => {
+    let captured: unknown = null
+    server.use(
+      http.post(url(SEARCH_PATHS.submit), async ({ request }) => {
+        captured = await request.json()
+        return HttpResponse.json(
+          {
+            query_id: 1,
+            execution_id: 7,
+            execution_status: "succeeded",
+            mode: "sync",
+            poll_url: "/api/v1/search/executions/7/",
+            response_url: "/api/v1/search/executions/7/response/",
+            response: null,
+          },
+          { status: 201 }
+        )
+      })
+    )
 
-      const polled = await getExecution(envelope.poll_url)
-      expect(polled.status).toBe("pending")
+    await submitSearch({ query: "no filters" })
+    expect(captured).toMatchObject({ filters: {} })
+  })
+})
 
-      vi.setSystemTime(5_000)
-      const response = await getExecutionResponse(envelope.response_url)
-      expect(response.blocks.length).toBe(2)
-    } finally {
-      vi.useRealTimers()
-    }
+describe("getExecution", () => {
+  it("echoes the stored guest token as X-Search-Guest-Token", async () => {
+    tokenStore.setGuestToken(SEARCH_GUEST_TOKEN_KEY, "guest-abc")
+    let receivedHeader: string | null = null
+    server.use(
+      http.get(`${API_URL}/api/v1/search/executions/:id/`, ({ request }) => {
+        receivedHeader = request.headers.get("x-search-guest-token")
+        return HttpResponse.json({
+          id: 99,
+          query_id: 1,
+          execution_number: 1,
+          status: "running",
+          mode: "async",
+          started_at: null,
+          completed_at: null,
+          latency_ms: null,
+          response_available: false,
+          created_at: "2026-05-03T00:00:00Z",
+          updated_at: "2026-05-03T00:00:00Z",
+        })
+      })
+    )
+
+    const summary = await getExecution("/api/v1/search/executions/99/")
+    expect(summary.status).toBe("running")
+    expect(receivedHeader).toBe("guest-abc")
   })
 
-  it("getExecutionResponse rejects with status 409 while still pending", async () => {
-    vi.useFakeTimers({ now: 0 })
-    try {
-      const envelope = await submitSearch({ query: "still pending" })
-      await expect(getExecutionResponse(envelope.response_url)).rejects.toEqual(
-        expect.objectContaining({ status: 409 })
+  it("omits the guest token header when none is stored", async () => {
+    let hadHeader = true
+    server.use(
+      http.get(`${API_URL}/api/v1/search/executions/:id/`, ({ request }) => {
+        hadHeader = request.headers.has("x-search-guest-token")
+        return HttpResponse.json({
+          id: 1,
+          query_id: 1,
+          execution_number: 1,
+          status: "succeeded",
+          mode: "async",
+          started_at: null,
+          completed_at: null,
+          latency_ms: null,
+          response_available: true,
+          created_at: "2026-05-03T00:00:00Z",
+          updated_at: "2026-05-03T00:00:00Z",
+        })
+      })
+    )
+
+    await getExecution("/api/v1/search/executions/1/")
+    expect(hadHeader).toBe(false)
+  })
+})
+
+describe("getExecutionResponse", () => {
+  it("parses the response on 200", async () => {
+    server.use(
+      http.get(
+        `${API_URL}/api/v1/search/executions/:id/response/`,
+        () =>
+          HttpResponse.json({
+            id: 4824,
+            execution: 1,
+            title: "Hello",
+            overall_confidence: 0.5,
+            render_schema_version: "v1",
+            metadata: {},
+            blocks: [],
+            created_at: "2026-05-03T00:00:00Z",
+            updated_at: "2026-05-03T00:00:00Z",
+          })
       )
-    } finally {
-      vi.useRealTimers()
-    }
+    )
+    const response = await getExecutionResponse(
+      "/api/v1/search/executions/1/response/"
+    )
+    expect(response.title).toBe("Hello")
   })
 
-  it("getExecution rejects on unparseable url", async () => {
-    await expect(getExecution("/does-not-match")).rejects.toBeInstanceOf(Error)
+  it("surfaces 409 as a NormalizedApiError with status 409", async () => {
+    server.use(
+      http.get(
+        `${API_URL}/api/v1/search/executions/:id/response/`,
+        () => HttpResponse.json({ detail: "not ready" }, { status: 409 })
+      )
+    )
+    await expect(
+      getExecutionResponse("/api/v1/search/executions/1/response/")
+    ).rejects.toEqual(expect.objectContaining({ status: 409 }))
+  })
+})
+
+describe("listSearchBookmarks", () => {
+  it("unwraps a paginated response", async () => {
+    server.use(
+      http.get(url(SEARCH_PATHS.bookmarks), () =>
+        HttpResponse.json({
+          count: 1,
+          next: null,
+          previous: null,
+          results: [
+            {
+              id: 1,
+              response: 7,
+              result_item: null,
+              note: "first",
+              created_at: "2026-05-03T00:00:00Z",
+              updated_at: "2026-05-03T00:00:00Z",
+            },
+          ],
+        })
+      )
+    )
+    const bookmarks = await listSearchBookmarks()
+    expect(bookmarks.length).toBe(1)
+    expect(bookmarks[0].note).toBe("first")
   })
 
-  it("createSearchBookmark stores a bookmark and listSearchBookmarks returns it", async () => {
-    const before = await listSearchBookmarks()
+  it("accepts a bare array response", async () => {
+    server.use(
+      http.get(url(SEARCH_PATHS.bookmarks), () =>
+        HttpResponse.json([
+          {
+            id: 2,
+            response: 8,
+            result_item: null,
+            note: "bare",
+            created_at: "2026-05-03T00:00:00Z",
+            updated_at: "2026-05-03T00:00:00Z",
+          },
+        ])
+      )
+    )
+    const bookmarks = await listSearchBookmarks()
+    expect(bookmarks.length).toBe(1)
+    expect(bookmarks[0].note).toBe("bare")
+  })
+})
+
+describe("createSearchBookmark / deleteSearchBookmark", () => {
+  it("creates a bookmark and deletes it", async () => {
+    let deletedId: string | null = null
+    server.use(
+      http.delete(`${API_URL}/api/v1/search/bookmarks/:id/`, ({ params }) => {
+        deletedId = String(params.id)
+        return new HttpResponse(null, { status: 204 })
+      })
+    )
     const created = await createSearchBookmark({
       response_id: 42,
       note: "interesting",
@@ -70,20 +243,13 @@ describe("search service (mock dispatch)", () => {
     expect(created.response).toBe(42)
     expect(created.note).toBe("interesting")
 
-    const after = await listSearchBookmarks()
-    expect(after.length).toBe(before.length + 1)
-    expect(after.find((b) => b.id === created.id)).toBeTruthy()
-
     await deleteSearchBookmark(created.id)
-    const cleaned = await listSearchBookmarks()
-    expect(cleaned.find((b) => b.id === created.id)).toBeUndefined()
+    expect(deletedId).toBe(String(created.id))
   })
+})
 
-  it("deleteSearchBookmark is a no-op on unknown ids", async () => {
-    await expect(deleteSearchBookmark(9999999)).resolves.toBeUndefined()
-  })
-
-  it("createSearchFeedback returns a fake feedback record", async () => {
+describe("createSearchFeedback", () => {
+  it("posts and returns the server payload", async () => {
     const feedback = await createSearchFeedback({
       feedback_type: "helpful",
       response_id: 123,
@@ -94,12 +260,11 @@ describe("search service (mock dispatch)", () => {
     expect(feedback.comment).toBe("nice")
   })
 
-  it("createSearchFeedback fills defaults when fields are omitted", async () => {
+  it("posts even when optional fields are omitted", async () => {
     const feedback = await createSearchFeedback({
       feedback_type: "not_helpful",
       response_id: 1,
     })
-    expect(feedback.comment).toBe("")
-    expect(feedback.metadata).toEqual({})
+    expect(feedback.feedback_type).toBe("not_helpful")
   })
 })
