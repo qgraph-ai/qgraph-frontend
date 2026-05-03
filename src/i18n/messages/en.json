@@ -42,7 +42,8 @@
   },
   "footer": {
     "tagline": "Built with restraint.",
-    "copyright": "© QGraph"
+    "copyright": "© QGraph",
+    "references": "References"
   },
   "search": {
     "metaTitle": "Advanced Search",
@@ -272,6 +273,43 @@
         "oauth_callback_failed": "We couldn't complete the Google sign-in. Please try again.",
         "unknown": "Something went wrong during authentication. Please try again."
       }
+    }
+  },
+  "references": {
+    "metaTitle": "References",
+    "metaDescription": "External sources, datasets, and publications used by QGraph.",
+    "kicker": "References",
+    "title": "Sources behind QGraph.",
+    "subtitle": "External datasets, software, papers, and APIs that power the project.",
+    "count": "{count} sources",
+    "types": {
+      "website": "Website",
+      "dataset": "Dataset",
+      "book": "Book",
+      "paper": "Paper",
+      "article": "Article",
+      "software": "Software",
+      "api": "API",
+      "other": "Other"
+    },
+    "fields": {
+      "publisher": "Publisher",
+      "identifier": "Identifier",
+      "license": "License",
+      "accessed": "Accessed"
+    },
+    "actions": {
+      "visitSource": "Visit source",
+      "visitSourceAria": "Visit {title} (opens in a new tab)"
+    },
+    "empty": {
+      "title": "No references yet.",
+      "body": "References will appear here once they're published."
+    },
+    "error": {
+      "title": "Couldn't load references.",
+      "body": "Something went wrong reaching the source service. Try again.",
+      "retry": "Try again"
     }
   },
   "quran": {

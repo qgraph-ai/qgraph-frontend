@@ -17,6 +17,8 @@ import type {
   Tag,
   Workspace,
 } from "@/services/segmentation/types"
+import { SOURCES_PATHS } from "@/services/sources/paths"
+import type { SourceReference } from "@/services/sources/types"
 
 const url = (path: string) => `${API_URL}${path}`
 
@@ -350,10 +352,59 @@ export const searchHandlers = [
   }),
 ]
 
+export const FAKE_SOURCES: SourceReference[] = [
+  {
+    id: 1,
+    title: "Tanzil Quran Text",
+    source_type: "dataset",
+    authors_or_organization: "Tanzil Project",
+    year: 2021,
+    url: "https://tanzil.net/",
+    publisher: "Tanzil Project",
+    identifier: "Version 1.1",
+    description:
+      "A highly verified Unicode Quran text provided by the Tanzil Project.",
+    usage_note: "Used in QGraph as a source for Quran text and translations.",
+    license_name: "Creative Commons Attribution 3.0",
+    license_url: "https://tanzil.net/docs/text_license",
+    accessed_at: "2026-05-03",
+    display_order: 10,
+  },
+  {
+    id: 2,
+    title: "Quranic Arabic Corpus",
+    source_type: "dataset",
+    authors_or_organization: "",
+    year: null,
+    url: "https://corpus.quran.com/",
+    publisher: "",
+    identifier: "",
+    description:
+      "Annotated linguistic resource for the Holy Quran with morphological analysis.",
+    usage_note: "",
+    license_name: "",
+    license_url: "",
+    accessed_at: null,
+    display_order: 20,
+  },
+]
+
+export const sourcesHandlers = [
+  http.get(url(SOURCES_PATHS.list), () =>
+    HttpResponse.json({
+      count: FAKE_SOURCES.length,
+      next: null,
+      previous: null,
+      results: FAKE_SOURCES,
+    })
+  ),
+]
+
 export const handlers = [
   ...quranHandlers,
   ...segmentationHandlers,
   ...searchHandlers,
+  ...sourcesHandlers,
   http.get(url(AUTH_PATHS.csrf), () =>
     HttpResponse.json(
       { csrfToken: "test-csrf-token" },
