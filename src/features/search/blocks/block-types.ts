@@ -1,4 +1,5 @@
 import type {
+  MarkdownBlockPayload,
   SearchResponseBlock,
   SurahDistributionPayload,
   TextBlockPayload,
@@ -12,6 +13,14 @@ export function isTextPayload(payload: unknown): payload is TextBlockPayload {
   if (typeof payload !== "object" || payload === null) return false
   const candidate = payload as Record<string, unknown>
   return typeof candidate.details === "string"
+}
+
+export function isMarkdownPayload(
+  payload: unknown
+): payload is MarkdownBlockPayload {
+  if (typeof payload !== "object" || payload === null) return false
+  const candidate = payload as Record<string, unknown>
+  return typeof candidate.content === "string"
 }
 
 export function isSurahDistributionPayload(

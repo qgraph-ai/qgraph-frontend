@@ -46,11 +46,16 @@ export type SearchExecutionSummary = {
   error_message?: string
 }
 
-export type SearchBlockType = "text" | "surah_distribution"
+export type SearchBlockType = "text" | "markdown" | "surah_distribution"
 
 export type TextBlockPayload = {
   headline?: string
   details: string
+}
+
+export type MarkdownBlockPayload = {
+  headline?: string
+  content: string
 }
 
 export type SurahDistributionPayload = {
